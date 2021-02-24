@@ -26,8 +26,14 @@
       .then(blob => {
         img = URL.createObjectURL(blob)
       })
-
-      console.log(img)
+  }
+  
+  function median(){
+    fetch("./median")
+      .then(response => response.blob())
+      .then(blob => {
+        img = URL.createObjectURL(blob)
+      })
   }
 
 
@@ -40,6 +46,8 @@
 
   <button on:click={makeRequest} class="btn btn-primary">Make a request</button>
   <button on:click={loadImage} class="btn btn-secondary">Load image</button>
+  <button on:click={median} class="btn btn-warning">Apply median</button>
+
 </div>
 
 <div clas="container mt-5">
