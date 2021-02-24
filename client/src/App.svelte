@@ -10,9 +10,20 @@
   popper.src = 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js';
   document.head.appendChild(popper);
 
+  import ImgEncoder from 'svelte-image-encoder';
+  let str = "", img = "";
 
-  let str = "";
-  let img = "";
+  let src='https://raw.githubusercontent.com/sveltejs/svelte/29052aba7d0b78316d3a52aef1d7ddd54fe6ca84/site/static/images/svelte-android-chrome-512.png';
+  let url;
+	let quality = 0.1;
+	let imageChosen = false;
+	let realTime = true;
+	let showResult = true;
+
+	function loadFile(e) {
+		src = URL.createObjectURL(e.target.files[0]);
+	}
+
 
   function makeRequest() {
     fetch("./stringtest")
@@ -44,8 +55,48 @@
       })
   }
 
+  function upload(){
+
+    fetch('./uploadtest', {
+      method: 'POST',
+      body: url
+    })
+    .then(response => console.log(response))
+    // .then(result => {
+    //   console.log('Success:', result);
+    // })
+    // .catch(error => {
+    //   console.error('Error:', error);
+    // });
+
+    console.log(url)
+
+  }
+
 
 </script>
+
+<div class="container">
+  <div class="jumbotron">
+    <h1>Upload your image</h1>
+    <p class="lead"></p>
+    <!-- <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data"> -->
+      <!-- <input id="file-picker" type="file" name="file" accept="image/*" class="hidden" onchange="{() => console.log("AEE")}">
+      <label for="file-picker" class="btn btn-lg btn-success">Select file</label> -->
+    <!-- </form> -->
+    <p><input on:change={loadFile} type='file' > Quality: <input type='number' bind:value={quality} min='0' max='1' step='0.05'></p>
+
+    <ImgEncoder {src} bind:url {realTime} width={256} height={256} crossOrigin='anonymous' classes='profile-image'/>
+    <img src={url} alt=''>
+
+    <!-- <p>Result ({url && url.length} bytes):</p> -->
+    <!-- <p>{ url }</p> -->
+
+    <button class="btn btn-primary" on:click={upload}>Upload</button>
+  </div>
+</div>
+
+
 
 <div class="container">
   <div class="row">
@@ -77,6 +128,21 @@
 
 
 <style>
-  @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"); 
+  @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
+
+  :global(body) {
+		overflow: hidden;
+		width: 100%;
+	}
+	:global(.profile-image) { /* Ideally, something like this would go in a global theme definition CSS */
+		box-shadow: 2px 2px 8px rgba(0,0,0,.85);
+		margin: 1em;
+	}
+	p {
+		word-break: break-word;
+	}
+	img {
+		margin: 1em;
+	}
 </style>
   
