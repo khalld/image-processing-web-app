@@ -11,8 +11,6 @@ import cv2
 
 def mean_or_median(data, H, W, str):
 
-    print("INSIDE MEDIAN FUNCTION")
-
     I = data
 
     for i in range(2, W-1):

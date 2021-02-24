@@ -36,6 +36,14 @@
       })
   }
 
+  function mean(){
+    fetch("./mean")
+      .then(response => response.blob())
+      .then(blob => {
+        img = URL.createObjectURL(blob)
+      })
+  }
+
 
 </script>
 
@@ -43,15 +51,27 @@
   <div class="row">
     <h1>Hello {str}</h1>
   </div>
-
-  <button on:click={makeRequest} class="btn btn-primary">Make a request</button>
-  <button on:click={loadImage} class="btn btn-secondary">Load image</button>
-  <button on:click={median} class="btn btn-warning">Apply median</button>
-
+  <button on:click={makeRequest} class="btn btn-primary">req return str</button>
 </div>
 
-<div clas="container mt-5">
-  <img src="{img}" alt="Queen of dragons">
+<div class="container mt-2">
+  <div class="row">
+    <div class="col">
+      <button on:click={loadImage} class="btn btn-secondary">Load default image</button>
+    </div>
+    <div class="col">
+      <button on:click={median} class="btn btn-warning">Median</button>
+    </div>
+    <div class="col">
+      <button on:click={mean} class="btn btn-warning">Mean</button>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-2 ">
+  <div class="row justify-content-center align-items-center">
+    <img src="{img}" alt="Queen of dragons">
+  </div>
 </div>
 
 

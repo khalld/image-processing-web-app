@@ -2,6 +2,14 @@ Run single script: (decommentare il main)
 
 `python test.py` or `python3 test.py`
 
+## Todo
+
+- Import algoritmi:
+    - Media / Mediano
+        - da implementare il kernel dinamico
+    - Guided [STUCK]
+    - Bilateral [STUCK]
+
 ## Bilateral filter da repo opencv
 
 http://jamesgregson.ca/bilateral-filtering-in-python.html
