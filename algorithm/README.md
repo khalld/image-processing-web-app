@@ -1,9 +1,6 @@
-# test-python
- 
-How to run single script:
+Run single script: (decommentare il main)
 
 `python test.py` or `python3 test.py`
-
 
 ## Bilateral filter da repo opencv
 
