@@ -14,11 +14,16 @@ def getSourceImg(target, filename):
     return source
 
 # DEPRECATED 
-#il base64 ha dei caratteri strani all'inizio. quindi lo devo pulire
-# def cleanbase64(str):
-#     l = list(str)  # convert to list
-#     del(l[0:2]) # si deve eliminare b' non so perché lo ritorni..
-#     del(l[-1]) # .. ed anche un " ' " finale
-#     s = "".join(l)  # convert back to string
+# il base64 ha dei caratteri strani all'inizio. quindi lo devo pulire
+def cleanbase64(str):
+    l = list(str)  # convert to list
+    # del(l[0:2]) # si deve eliminare b' non so perché lo ritorni..
+    # del(l[-1]) # .. ed anche un " ' " finale
+
+    #elimino i primi caratteri che sarebbero base:64 ecc...
+    del(l[0:23])
+
+    s = "".join(l)  # convert back to string
     
-#     return s
+
+    return s

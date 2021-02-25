@@ -30,13 +30,15 @@ This example just queries the Flask server for a random number.
 - Completare procedura venv
 - ~~Import bootstrap per frontEnd~~
 - ~~Refactoring delle varie funzioni fin'ora utilizzate (pulizia codice)~~
+- ~~Gestione upload immagine: upload --> base64 --> salva l'immagine~~ *Ricorda di dire che si perde qualità! si può salvare un dettaglio dell'immagine in upload tramite lo zoom*
+- Impostare logica:
+    - un'immagine di default deve essere sempre considerata.
+    - se faccio upload di un'immagine devo utilizzare quella e non considero più l'altr
 - Import algoritmi:
     - ~~Media~~
     - ~~Mediano~~
     - Guided
     - Bilateral
-- Gestione upload immagine [working on]
-    UPLOAD --> BASE64 --> SALVA L'IMMAGINE 
 - Applicazione degli algoritmi all'immagine per cui si è fatto l'upload
 
 ## Rotte

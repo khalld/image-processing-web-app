@@ -8,11 +8,16 @@ from libs.algorithm.mean_or_median import mean_or_median
 from libs.utils import saveImg, getSourceImg, cleanbase64
 
 import base64
-from io import BytesIO
+import io
 
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+target = os.path.join(APP_ROOT, 'static/images')
+
+targetUpload = os.path.join(APP_ROOT, 'static/images/uploaded')
+
 
 # Path for our main Svelte page
 @app.route("/")
@@ -28,27 +33,34 @@ def home(path):
 def test():
     return str("world")
 
-@app.route("/test")
-def loadImageFromStatic():
-    return send_image('test.jpg')
+# deprecata -- da fare solo la normalizzazione
+# @app.route("/editandsaveimg")
+# def editandsaveimg():
 
-@app.route("/editandsaveimg")
-def editandsaveimg():
+#     new_filename = "edited/new_img.png"
 
-    new_filename = "edited/new_img.png"
-    target = os.path.join(APP_ROOT, 'static/images')
-    source = getSourceImg(target, 'test.jpg')
-    img_edited = Image.open(source).convert("L")
-    saveImg(img_edited, target, new_filename)
+#     source = getSourceImg(target, 'test.jpg')
+#     img_edited = Image.open(source).convert("L")
+#     saveImg(img_edited, target, new_filename)
 
-    return send_image(new_filename)
+#     return send_image(new_filename)
 
 @app.route("/median")
 def median():
 
     new_filename = "edited/median.png"
-    target = os.path.join(APP_ROOT, 'static/images')
+
+    # non funziona il trycatch! mi prende solo quello sotto l'else, al momento lo lascio così!
+
+    # try:
+    #     source = getSourceImg(targetUpload, 'uploaded.png')
+    # except FileNotFoundError:
+    #     print("File not found! Get the default value..!")
+    # else:
     source = getSourceImg(target, 'test.jpg')
+
+
+    # print("AAA", source)
 
     img_noisy = Image.open(source).convert("L")
 
@@ -63,7 +75,7 @@ def median():
 def mean():
 
     new_filename = "edited/mean.png"
-    target = os.path.join(APP_ROOT, 'static/images')
+    # target = os.path.join(APP_ROOT, 'static/images')
     source = getSourceImg(target, 'test.jpg')
 
     img_noisy = Image.open(source).convert("L")
@@ -77,63 +89,18 @@ def mean():
 
 
 # TO DO *+++++++++++++#
-@app.route("/uploadtest", methods=["POST"])
-def uploadtest():
-
-    # il tipo è byte quindi devo fare il cast
-    # print(type(request.get_data()))
-    # print(request.get_data().decode())
-
-    # base64 = cleanbase64(str(request.get_data()))
-
-    # image_data = request.get_data()
-
-    image_data = BytesIO(request.get_data())
-    # image.save(image_data, 'res.png')
-
-    img = Image.frombytes("L", (3, 2), image_data)
-    print(img)
-
-    # print(image_data)
-    # print(type(imageData.decode()))
-
-    # img = Image.open(imageData.encode())
-
-    # img.save('image.jpg')
-
-    # print(img)
-
-
-    return str("aaaaaa")
-
-# upload selected image and forward to processing page
 @app.route("/upload", methods=["POST"])
-def upload():
-    target = os.path.join(APP_ROOT, 'static/images/')
+def uploadtest():
+    # devo eliminare data:image/jpeg;base64,/ altrimenti non funge..
+    data = cleanbase64(request.get_data(as_text='true'))
 
-    # create image directory if not found
-    if not os.path.isdir(target):
-        os.mkdir(target)
+    imgdata = base64.b64decode(data)
+    filename = 'static/images/uploaded/uploaded.png'  # I assume you have a way of picking unique filenames
+    with open(filename, 'wb') as f:
+        f.write(imgdata)
 
-    # retrieve file from html file-picker
-    upload = request.files.getlist("file")[0]
-    print("File name: {}".format(upload.filename))
-    filename = upload.filename
+    return send_from_directory("static/images/uploaded", "uploaded.png")
 
-    # file support verification
-    ext = os.path.splitext(filename)[1]
-    if (ext == ".jpg") or (ext == ".png") or (ext == ".bmp"):
-        print("File accepted")
-    else:
-        return render_template("error.html", message="The selected file is not supported"), 400
-
-    # save file
-    destination = "/".join([target, filename])
-    print("File saved to to:", destination)
-    upload.save(destination)
-
-    # forward to processing page
-    return render_template("processing.html", image_name=filename)
 
 @app.route('/static/images/<filename>')
 def send_image(filename):
