@@ -13,6 +13,7 @@
   // ****** end
   
   import ImgEncoder from 'svelte-image-encoder';
+  import TableRow from './components/TableRow.svelte'
   
   let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256;
   
@@ -86,18 +87,10 @@
     </tr>
   </thead>
 
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td><button on:click={median} class="btn btn-warning">Median</button></td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <th scope="row">2</th>
-      <td><button on:click={mean} class="btn btn-warning">Mean</button></td>
-    </tr>
-  </tbody>
+  <TableRow method={median} name="Median" numberRow="1"/>
+  <TableRow method={mean} name="Mean" numberRow="2"/>
+  <TableRow method={() => console.log("TODO..")} name="Bilateral" numberRow="3"/>
+  <TableRow method={() => console.log("TODO..")} name="Guided" numberRow="4"/>
 
 </table>
 

@@ -69,6 +69,20 @@ def mean():
 
     return send_image(new_filename)
 
+@app.route("/bilateral")
+def bilateral():
+
+    print("TODO......")
+
+    return str("OK")
+
+@app.route("/guided")
+def guided():
+
+    print("TODO......")
+
+    return str("OK")
+
 @app.route("/upload", methods=["POST"])
 def uploadtest():
     # devo eliminare data:image/jpeg;base64,/ altrimenti non funge..
