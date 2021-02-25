@@ -46,7 +46,7 @@ def mean_or_median(data, H, W, str):
 #     # Read the image with cv2 || alternativamente a Image
 #     # img_noisy1 = cv2.imread('original.jpg', 0) 
     
-#     img_noisy = Image.open("original.jpg").convert("L") # Converto l'immagine e la rendo a canale unico    
+#     img_noisy = Image.open("../../static/images/test.jpg").convert("L") # Converto l'immagine e la rendo a canale unico    
 #     img_noisy.show(title="Original")
 
 #     arr = numpy.array(img_noisy)
@@ -64,8 +64,8 @@ def mean_or_median(data, H, W, str):
 #     img_filtered_mean.show(title="Mean")
 
 #     #save image elaborated with cv2
-#     cv2.imwrite('median.png', removed_noise_median)
-#     cv2.imwrite('mean.png', removed_noise_mean)       ## per salvarlo
+#     cv2.imwrite('../../static/images/edited/median.png', removed_noise_median)
+#     cv2.imwrite('../../static/images/edited/mean.png', removed_noise_mean)       ## per salvarlo
 
 
 

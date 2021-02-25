@@ -4,7 +4,7 @@ import numpy
 from PIL import Image
 import cv2
 import os
-from libs.algorithm.mean_or_median import mean_or_median
+from libs.algorithms.mean_or_median import mean_or_median
 from libs.utils import saveImg, getSourceImg, cleanbase64
 
 import base64
