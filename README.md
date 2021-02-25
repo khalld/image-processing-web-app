@@ -3,14 +3,10 @@ Progetto multimedia per Università di Catania - Informatica (Magistrale) AA 202
 
 Image processing tramite python. L'applicativo è gestito con richieste backend con flask e svelteJs per il frontend.
 
-# Setup virtual environment (most safe) (all'interno della cartella)
+# Setup virtual environment (most safe, not necessary)
+All'interno della cartella `python3 -m venv venv` and activate with `source venv/bin/activate` , per trovare tutti i moduli installati `pip3 list`
 
-`python3 -m venv venv` and activate with `source venv/bin/activate` 
-
-Utils: 
-- pip3 list (all list of modules)
-- pip3 install flask
-### creare file requirements.txt
+_*Installare tutti i requirements.txt ( COMPLETARE FILE)  *_
 
 # Svelte.js + Flask
 Source:  https://github.com/cabreraalex/svelte-flask-example
@@ -27,7 +23,8 @@ This example just queries the Flask server for a random number.
 
 # Piano di sviluppo
 - ~~Introduzione virtual env --> ciò che è scritto qui https://www.youtube.com/watch?v=b9BYA483yVI~~
-- Completare procedura venv
+- ~~Completare procedura venv~~
+- Sistemare layout
 - ~~Import bootstrap per frontEnd~~
 - ~~Refactoring delle varie funzioni fin'ora utilizzate (pulizia codice)~~
 - ~~Gestione upload immagine: upload --> base64 --> salva l'immagine~~ *Ricorda di dire che si perde qualità! si può salvare un dettaglio dell'immagine in upload tramite lo zoom*
