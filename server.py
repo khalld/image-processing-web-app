@@ -29,38 +29,23 @@ def base():
 def home(path):
     return send_from_directory('client/public', path)
 
-@app.route("/stringtest")
-def test():
-    return str("world")
-
-# deprecata -- da fare solo la normalizzazione
-# @app.route("/editandsaveimg")
-# def editandsaveimg():
-
-#     new_filename = "edited/new_img.png"
-
-#     source = getSourceImg(target, 'test.jpg')
-#     img_edited = Image.open(source).convert("L")
-#     saveImg(img_edited, target, new_filename)
-
-#     return send_image(new_filename)
-
 @app.route("/median")
 def median():
 
+    # new_filename = "edited/median_"+ str(random.randint(1, 99)) + ".png"
+
     new_filename = "edited/median.png"
 
-    # non funziona il trycatch! mi prende solo quello sotto l'else, al momento lo lascio così!
 
+    # ***** non funziona il trycatch! mi prende solo quello sotto l'else, considero solo il file in upload! ******
     # try:
     #     source = getSourceImg(targetUpload, 'uploaded.png')
     # except FileNotFoundError:
     #     print("File not found! Get the default value..!")
     # else:
-    source = getSourceImg(target, 'test.jpg')
+    # source = getSourceImg(target, 'test.jpg')
 
-
-    # print("AAA", source)
+    source = getSourceImg(targetUpload, 'uploaded.png')
 
     img_noisy = Image.open(source).convert("L")
 
@@ -75,11 +60,8 @@ def median():
 def mean():
 
     new_filename = "edited/mean.png"
-    # target = os.path.join(APP_ROOT, 'static/images')
-    source = getSourceImg(target, 'test.jpg')
-
+    source = getSourceImg(targetUpload, 'uploaded.png')
     img_noisy = Image.open(source).convert("L")
-
     arr = numpy.array(img_noisy)
     img_median_applied = Image.fromarray(mean_or_median(arr, len(arr), len(arr[0]), "mean"))
 
@@ -87,8 +69,6 @@ def mean():
 
     return send_image(new_filename)
 
-
-# TO DO *+++++++++++++#
 @app.route("/upload", methods=["POST"])
 def uploadtest():
     # devo eliminare data:image/jpeg;base64,/ altrimenti non funge..

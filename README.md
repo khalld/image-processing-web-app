@@ -47,3 +47,5 @@ This example just queries the Flask server for a random number.
 ## Domande
 - Necessario introdurre persistenza? Al momento scegli il file e non salvare nulla
 - Chiedere se necessario a livello didattico posso utilizzare delle librerie già pronte, per farle vedere nelle altre lezioni
+- Se modifico l'immagine e faccio l'upload mi ritorna sempre lo stesso per via della cache. ogni volta che si deve testare un'immagine
+nuova si deve pulire la cache. (Posso lasciarlo così o devo sistemare necessariamente? non ho idea di come debba fare al momento!)

@@ -14,25 +14,17 @@
   
   import ImgEncoder from 'svelte-image-encoder';
   
-  let url, src, realTime = true, uploadedimg;
+  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256;
   
 	function loadFile(e) {
     src = URL.createObjectURL(e.target.files[0]);
 	}
 
-  // function loadImage(){
-  //   fetch("./test")
-  //     .then(response => response.blob())
-  //     .then(blob => {
-  //       img = URL.createObjectURL(blob)
-  //     })
-  // }
-  
   function median(){
     fetch("./median")
       .then(response => response.blob())
       .then(blob => {
-        uploadedimg = URL.createObjectURL(blob)
+        processedImage = URL.createObjectURL(blob)
       })
   }
 
@@ -40,12 +32,11 @@
     fetch("./mean")
       .then(response => response.blob())
       .then(blob => {
-        uploadedimg = URL.createObjectURL(blob)
+        processedImage = URL.createObjectURL(blob)
       })
   }
 
   function upload(){
-
     fetch('./upload', {
       method: 'POST',
       body: url
@@ -63,53 +54,59 @@
 
 </script>
 
-<div class="container">
-  <div class="jumbotron">    
-    <p><input on:change={loadFile} type='file'>
-    <ImgEncoder {src} bind:url {realTime} width={256} height={256} crossOrigin='anonymous' classes='profile-image'/>
-
-    <button class="btn btn-primary" on:click={upload}>Upload</button>
+<div class="d-flex">
+  <div class="p-2 flex-fill">
+    <input on:change={loadFile} type='file'>
+  </div>
+  <div class="p-2 flex-fill">
+    <button class="btn btn-primary" on:click={upload}>UPLOAD</button>
   </div>
 </div>
 
-<img src="{uploadedimg}" alt="uploaded img">
-
-
-<div class="container mt-2">
-  <div class="row">
-    <div class="col">
-      LOAD DEFAULT IMAGE...
-      <!-- <button on:click={loadImage} class="btn btn-secondary">Load default image</button> -->
-    </div>
-    <div class="col">
-      <button on:click={median} class="btn btn-warning">Median</button>
-    </div>
-    <div class="col">
-      <button on:click={mean} class="btn btn-warning">Mean</button>
-    </div>
+<div class="d-flex">
+  <div class="p-2 flex-fill">
+    <p>Choosed image</p>
+    <ImgEncoder {src} bind:url {realTime} width={w} height={h} crossOrigin='anonymous' classes='image'/>
+  </div>
+  <div class="p-2 flex-fill">
+    <p>Immagine di riferimento</p>
+    <img src="{uploadedimg}" class="image" width={w} height={h} alt="uploaded img">
+  </div>
+  <div class="p-2 flex-fill">
+    <p>Processed image</p>
+    <img src="{processedImage}" class="image" width={w} height={h} alt="uploaded img">
   </div>
 </div>
 
-<div class="container mt-2 ">
-  <div class="row justify-content-center align-items-center">
-    <img src="{uploadedimg}" alt="Queen of dragons">
-  </div>
-</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Method</th>
+    </tr>
+  </thead>
 
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td><button on:click={median} class="btn btn-warning">Median</button></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <th scope="row">2</th>
+      <td><button on:click={mean} class="btn btn-warning">Mean</button></td>
+    </tr>
+  </tbody>
+
+</table>
 
 
 <style>
   @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
 
-	:global(.profile-image) { /* Ideally, something like this would go in a global theme definition CSS */
+	:global(.image) {
 		box-shadow: 2px 2px 8px rgba(0,0,0,.85);
-		margin: 1em;
-	}
-	p {
-		word-break: break-word;
-	}
-	img {
-		margin: 1em;
 	}
 </style>
   

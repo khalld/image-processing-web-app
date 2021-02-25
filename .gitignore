@@ -1,6 +1,7 @@
 .vscode
 # TEMPOREANEO, UNA VOLTA FINITO FAI L'UPLOAD
 static/images/edited
+static/images/uploaded
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
