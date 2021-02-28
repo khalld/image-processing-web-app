@@ -34,9 +34,9 @@ This example just queries the Flask server for a random number.
 - Import algoritmi:
     - ~~Media~~
     - ~~Mediano~~
-    - Bilateral [WORKING]
+    - ~~Bilateral~~
     - Guided [WORKING]
-- Applicazione degli algoritmi all'immagine per cui si è fatto l'upload
+- ~~Applicazione degli algoritmi all'immagine per cui si è fatto l'upload~~
 
 ## Rotte
 

@@ -13,27 +13,45 @@
   // ****** end
   
   import ImgEncoder from 'svelte-image-encoder';
-  import TableRow from './components/TableRow.svelte'
+  import TableRow from './components/TableRow.svelte';
   
-  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256;
+  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256, filterName, loading;
   
 	function loadFile(e) {
     src = URL.createObjectURL(e.target.files[0]);
 	}
 
   function median(){
+    loading = true;
     fetch("./median")
       .then(response => response.blob())
       .then(blob => {
+        loading = false;
         processedImage = URL.createObjectURL(blob)
+        filterName = "median filter";
       })
   }
 
   function mean(){
+    loading = true;
     fetch("./mean")
       .then(response => response.blob())
       .then(blob => {
+        loading = false;
         processedImage = URL.createObjectURL(blob)
+        filterName = "mean";
+      })
+  }
+
+
+  function bilateral(){
+    loading = true;
+    fetch("./bilateral")
+      .then(response => response.blob())
+      .then(blob => {
+        loading = false;
+        processedImage = URL.createObjectURL(blob)
+        filterName = "bilateral";
       })
   }
 
@@ -73,10 +91,12 @@
     <p>Immagine di riferimento</p>
     <img src="{uploadedimg}" class="image" width={w} height={h} alt="uploaded img">
   </div>
-  <div class="p-2 flex-fill">
-    <p>Processed image</p>
-    <img src="{processedImage}" class="image" width={w} height={h} alt="uploaded img">
-  </div>
+  {#if loading || loading == false}
+    <div class="p-2 flex-fill">
+      <p>Processed image {#if filterName}with {filterName}{/if}</p>
+      <img src="{processedImage}" class="image" width={w} height={h} alt="uploaded img">
+    </div>
+  {/if}
 </div>
 
 <table class="table">
@@ -89,7 +109,7 @@
 
   <TableRow method={median} name="Median" numberRow="1"/>
   <TableRow method={mean} name="Mean" numberRow="2"/>
-  <TableRow method={() => console.log("TODO..")} name="Bilateral" numberRow="3"/>
+  <TableRow method={bilateral} name="Bilateral" numberRow="3"/>
   <TableRow method={() => console.log("TODO..")} name="Guided" numberRow="4"/>
 
 </table>

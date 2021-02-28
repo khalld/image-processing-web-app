@@ -5,6 +5,7 @@ from PIL import Image
 import cv2
 import os
 from libs.algorithms.mean_or_median import mean_or_median
+from libs.algorithms.bilateral import bilateral_filter
 from libs.utils import saveImg, getSourceImg, cleanbase64
 
 import base64
@@ -72,9 +73,15 @@ def mean():
 @app.route("/bilateral")
 def bilateral():
 
-    print("TODO......")
+    new_filename = "edited/bilateral.png"
+    source = getSourceImg(targetUpload, 'uploaded.png')
 
-    return str("OK")
+    img_noisy = Image.open(source).convert("L")
+    image_bilateral_applied = bilateral_filter(img_noisy, 7,7,6.5)
+
+    saveImg(image_bilateral_applied, target, new_filename)
+
+    return send_image(new_filename)
 
 @app.route("/guided")
 def guided():
