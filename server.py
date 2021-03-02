@@ -7,8 +7,8 @@ import os
 from libs.algorithms.mean_or_median import mean_or_median
 
 # da sistemare nella versione finale
-# from libs.algorithms.mean import mean
-# from libs.algorithms.median import median
+from libs.algorithms.mean import mean_old
+from libs.algorithms.median import median
 
 from libs.algorithms.bilateral import bilateral_filter
 
@@ -77,7 +77,7 @@ def mean():
     # mean_app = mean(arr, len(arr), len(arr[0]) )
 
     # vecchio
-    mean_app = mean_or_median(arr, len(arr), len(arr[0]), "mean")
+    mean_app = mean_old(arr, len(arr), len(arr[0]))
 
     img_mean_app = Image.fromarray(mean_app)
 
