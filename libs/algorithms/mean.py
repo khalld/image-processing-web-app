@@ -51,26 +51,26 @@ def mean(data, H, W):
     return I
 
 
-def main():
+# def main():
 
     # Read the image with cv2 || alternativamente a Image
     # img_noisy1 = cv2.imread('original.jpg', 0) 
     
-    img_noisy = Image.open("../../static/images/test.jpg").convert("L") # Converto l'immagine e la rendo a canale unico    
-    img_noisy.show(title="Original")
+    # img_noisy = Image.open("../../static/images/test.jpg").convert("L") # Converto l'immagine e la rendo a canale unico    
+    # img_noisy.show(title="Original")
 
-    arr = numpy.array(img_noisy)
+    # arr = numpy.array(img_noisy)
 
     # applico il filtro
-    removed_noise_mean = mean( arr, len(arr), len(arr[0]) )
+    # removed_noise_mean = mean( arr, len(arr), len(arr[0]) )
 
     # converto l'array in immagine
-    img_filtered_mean = Image.fromarray(removed_noise_mean)
+    # img_filtered_mean = Image.fromarray(removed_noise_mean)
 
-    img_filtered_mean.show(title="Mean")
+    # img_filtered_mean.show(title="Mean")
 
     #save image elaborated with cv2
-    cv2.imwrite('../../static/images/edited/mean.png', removed_noise_mean)       ## per salvarlo
+    # cv2.imwrite('../../static/images/edited/mean.png', removed_noise_mean)       ## per salvarlo
 
 
     # testa con il vecchio che il for dia lo stesso risultato
@@ -87,4 +87,4 @@ def main():
     # else:
     #     print("Different")
 
-main()
+# main()

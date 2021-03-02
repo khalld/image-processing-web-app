@@ -1,5 +1,0 @@
-pillow
-flask
-numpy
-cv2
-opencv-python

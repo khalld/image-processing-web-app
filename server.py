@@ -5,7 +5,13 @@ from PIL import Image
 import cv2
 import os
 from libs.algorithms.mean_or_median import mean_or_median
+
+# da sistemare nella versione finale
+# from libs.algorithms.mean import mean
+# from libs.algorithms.median import median
+
 from libs.algorithms.bilateral import bilateral_filter
+
 from libs.utils import saveImg, getSourceImg, cleanbase64
 
 import base64
@@ -32,11 +38,7 @@ def home(path):
 
 @app.route("/median")
 def median():
-
-    # new_filename = "edited/median_"+ str(random.randint(1, 99)) + ".png"
-
     new_filename = "edited/median.png"
-
 
     # ***** non funziona il trycatch! mi prende solo quello sotto l'else, considero solo il file in upload! ******
     # try:
@@ -47,11 +49,15 @@ def median():
     # source = getSourceImg(target, 'test.jpg')
 
     source = getSourceImg(targetUpload, 'uploaded.png')
-
     img_noisy = Image.open(source).convert("L")
-
     arr = numpy.array(img_noisy)
+
+    # vecchio
     img_median_applied = Image.fromarray(mean_or_median(arr, len(arr), len(arr[0]), "median"))
+
+    # nuovo da fixare
+    # img_median_applied = Image.fromarray( median( arr, len(arr), len(arr[0]) ) )
+
 
     saveImg(img_median_applied, target, new_filename)
 
@@ -64,9 +70,18 @@ def mean():
     source = getSourceImg(targetUpload, 'uploaded.png')
     img_noisy = Image.open(source).convert("L")
     arr = numpy.array(img_noisy)
-    img_median_applied = Image.fromarray(mean_or_median(arr, len(arr), len(arr[0]), "mean"))
 
-    saveImg(img_median_applied, target, new_filename)
+    # img_median_applied = Image.fromarray(mean_or_median(arr, len(arr), len(arr[0]), "mean"))
+
+    # nuovo da fixare
+    # mean_app = mean(arr, len(arr), len(arr[0]) )
+
+    # vecchio
+    mean_app = mean_or_median(arr, len(arr), len(arr[0]), "mean")
+
+    img_mean_app = Image.fromarray(mean_app)
+
+    saveImg(img_mean_app, target, new_filename)
 
     return send_image(new_filename)
 

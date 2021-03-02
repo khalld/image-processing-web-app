@@ -15,7 +15,7 @@
   import ImgEncoder from 'svelte-image-encoder';
   import TableRow from './components/TableRow.svelte';
   
-  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256, filterName, loading;
+  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256, filterName, loading = false;
   
 	function loadFile(e) {
     src = URL.createObjectURL(e.target.files[0]);
@@ -91,12 +91,21 @@
     <p>Immagine di riferimento</p>
     <img src="{uploadedimg}" class="image" width={w} height={h} alt="uploaded img">
   </div>
-  {#if loading || loading == false}
-    <div class="p-2 flex-fill">
+
+  <div class="p-2 flex-fill">
       <p>Processed image {#if filterName}with {filterName}{/if}</p>
+    {#if loading == false}
       <img src="{processedImage}" class="image" width={w} height={h} alt="uploaded img">
+    {:else if loading == true}
+    (lo spinner non si vede, fixa)
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
-  {/if}
+    {/if}
+  </div>
+
 </div>
 
 <table class="table">
