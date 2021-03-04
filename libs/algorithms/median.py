@@ -1,6 +1,5 @@
 import numpy
 from PIL import Image
-import cv2
 
 # sostituisce valore di un pixel con il mediano dei livelli di intensità del suo intorno.
 # alcuni tipi di rumori casuali hanno capacità di riduzione del rumore, sfocando meno rispetto a quelli di smoothing
@@ -8,12 +7,25 @@ import cv2
 
 # non considero i bordi, li salto completamente
 
-def median(data, H, W):
+# def median(data, H, W, str):
+def median(input_img, str):   ## credo che puoi togliere H e W che li prende in auto!
+
+    if(str == "L"):
+        print("converti ad un canale...")
+        
+        input_img.convert("L")
+        data = numpy.array(input_img)
+
+        w = len(data)
+        h = len(data[0])
+    else:
+        print("converto analizzando i 3 canali")
+        r, g, b = input_img.split()
 
     I = data
 
-    for i in range(2, W-1):
-        for j in range(3, H-1):
+    for i in range(2, w-1):
+        for j in range(3, h-1):
             
             temp = []   # array temporaneo che permette di cercare le statistiche d'ordine
 
@@ -39,40 +51,51 @@ def median(data, H, W):
     return I
 
 
-# def main():
+def main():
 
-    # Read the image with cv2 || alternativamente a Image
-    # img_noisy1 = cv2.imread('original.jpg', 0) 
+    ## IMMAGINI A UN SOLO CANALE (CONVERTITE) CON PILLOW
     
     # img_noisy = Image.open("../../static/images/test.jpg").convert("L") # Converto l'immagine e la rendo a canale unico    
-    # img_noisy.show(title="Original")
+    img_noisy = Image.open("../../static/images/test.jpg")
+    img_noisy.show(title="Original")
+
+    removed_noise = median(img_noisy, "L")
+    
+    result1 = Image.fromarray(removed_noise)
+
+    result1.show()
 
     # arr = numpy.array(img_noisy)
+    
+    ## applico il filtro
+    # removed_noise_median = median( arr, len(arr), len(arr[0]) )
+    
+    ## converto l'array in immagine
+    # img_filtered_median = Image.fromarray(removed_noise_median)
+    
+    # img_filtered_median.show(title="Median")
 
-    # applico il filtro
-    # removed_noise_mean = mean( arr, len(arr), len(arr[0]) )
+    # ******* IMMAGINI A COLORI **************
 
-    # converto l'array in immagine
-    # img_filtered_mean = Image.fromarray(removed_noise_mean)
+    img_noisy_color = Image.open("../../static/images/test.png")
+    # img_noisy_color.show(title="original")
 
-    # img_filtered_mean.show(title="Mean")
+    r, g, b = img_noisy_color.split()
 
-    #save image elaborated with cv2
-    # cv2.imwrite('../../static/images/edited/mean.png', removed_noise_mean)       ## per salvarlo
+    # r.show()
+    # b.show()
+    # g.show()
 
+    r = numpy.array(r)
+    g = numpy.array(g)
+    b = numpy.array(b)
+    
+    r = Image.fromarray(median(r, len(r), len(r[0])))
+    g = Image.fromarray(median(g, len(g), len(g[0])))
+    b = Image.fromarray(median(b, len(b), len(b[0])))
 
-    # testa con il vecchio che il for dia lo stesso risultato
-    # img_noisy2 = Image.open("../../static/images/test.jpg").convert("L") # Converto l'immagine e la rendo a canale unico    
-    # arr2 = numpy.array(img_noisy)
-    # removed_noise_mean_old = mean_old( arr2, len(arr2), len(arr2[0]) )
-    # img_filtered_mean_old = Image.fromarray(removed_noise_mean_old)
-    # img_filtered_mean_old.show(title="mean_old")
-    # cv2.imwrite('../../static/images/edited/mean_old.png', removed_noise_mean_old)       ## per salvarlo
+    result = Image.merge('RGB', (r, g, b))
 
+    result.show()
 
-    # if list(removed_noise_mean.getdata()) == list(removed_noise_mean_old.getdata()):
-    #     print("Identical")
-    # else:
-    #     print("Different")
-
-# main()
+main()
