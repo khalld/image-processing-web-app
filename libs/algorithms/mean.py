@@ -25,23 +25,41 @@ def mean_old(data, dim_kernel):       # require data = PIL.image.image
 
     data_array = numpy.array(data)
 
-    W = len(data_array)
-    H = len(data_array[0])
+    x_len = numpy.size(data_array,0)
 
-    # W, H = data.size()
+    y_len = numpy.size(data_array,1)
+
+    temp = []
 
     I = data_array
 
-    for i in range(0, W):    # asse x || rows
-        for j in range(0, H):    # asse y || columns
-            temp = []   # array temporaneo che permette di cercare le statistiche d'ordine
-            # # # kernel 3x3 fisso # 0..1..2
-            for x in range (i-1, i+1):
-                for y in range (j-1, j+1):
-                    temp.append(I[x][y])
-            
+    for i in range(0, x_len):    # asse x || rows
+        for j in range(0, y_len):    # asse y || columns
+ 
+            try:
+                # kernel 3x3 fisso!!
+                temp.append(I[i-1][j-1])
+                temp.append(I[i][j-1])
+                temp.append(I[i+1][j-1])
+
+                temp.append(I[i-1][j])
+                temp.append(I[i][j])
+                temp.append(I[i+1][j])
+
+                temp.append(I[i-1][j+1])
+                temp.append(I[i][j+1])
+                temp.append(I[i+1][j+1])
+
+                # print("LENNN", temp, len(temp), numpy.median(temp))
+
+                # print(numpy.median(temp), len(temp), temp)
+            except:
+                # print("ERRORE GESTITO", temp, len(temp))
+                temp = []   # skippiamo!
+                continue
 
             I[i][j] = numpy.mean(temp)
+            temp=[]
 
     I_ret = Image.fromarray(I)
 
@@ -52,10 +70,10 @@ def main():
     # IMMAGINI A UN SOLO CANALE (CONVERTITE) CON PILLOW
     
     # img_noisy = Image.open("../../static/images/test_rumore.png")# Converto l'immagine e la rendo a canale unico    
-    img_noisy = Image.open("../../static/images/rumor.jpg") # Converto l'immagine e la rendo a canale unico    
-    img_noisy.show(title="Original")
+    img_noisy = Image.open("../../static/images/noisyimg.png").convert("L") # Converto l'immagine e la rendo a canale unico    
+    # img_noisy.show(title="Original")
 
-    removed_noise_mean= mean_old(img_noisy, 3)
+    removed_noise_mean = mean(img_noisy, 3)
     removed_noise_mean.show(title="Mean3")
 
     # ******* IMMAGINI A COLORI **************
@@ -63,8 +81,7 @@ def main():
     img_noisy_color = Image.open("../../static/images/test.png")
     img_noisy_color.show(title="original")
 
-    res = mean(img_noisy_color, 3)
-
-    res.show()
+    res_color = mean(img_noisy_color, 3)
+    res_color.show()
 
 main()
