@@ -7,7 +7,7 @@ from PIL import Image
 
 # non considero i bordi, li salto completamente
 
-def remove_noise_algorithms(input, k, func):
+def remove_noise(input, k, func):
     if (input.mode == "L"):
         return remove_noise_op(input,k, func)
     else: # caso RGB
@@ -54,17 +54,3 @@ def remove_noise_op(data, dim_kernel, func):       # require data = PIL.image.im
     I_ret = Image.fromarray(I)
 
     return I_ret
-
-
-# def main():
-
-#     res_3 = remove_noise_algorithms(Image.open("../../static/images/noisyimg.png"), 3, "median")
-#     res_5 = remove_noise_algorithms(Image.open("../../static/images/noisyimg.png"), 5, "median")
-#     res_8 = remove_noise_algorithms(Image.open("../../static/images/noisyimg.png"), 8, "median")
-
-#     res_3.show()
-#     res_5.show()
-#     res_8.show()
-
-
-# main()

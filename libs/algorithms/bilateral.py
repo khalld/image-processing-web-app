@@ -42,20 +42,3 @@ def bilateral_filter_op(input_img, radius, sigma_d, sigma_r):
     image_new = Image.fromarray(I_new)
 
     return image_new
-
-
-def main():
-
-    path = '../../static/images/'
-
-    img = Image.open(path + 'test.png').convert('L')        # linux da il warning perché la apre stranamente con il programma di default, l'originale è in jpg! 
-
-
-
-    # img.show()
-
-    # image_new = bilateral_filter(img, 7,7,6.5)
-
-    # image_new.show()
-
-main()
