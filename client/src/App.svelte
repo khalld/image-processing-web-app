@@ -110,9 +110,13 @@
       console.error('Error:', error);
     });
   }
-
+  
+  function download(){
+    window.location.href = processedImage
+  }
 
 </script>
+
 
 
 <div class="d-flex">
@@ -120,8 +124,13 @@
     <input on:change={(e) => loadFile(e)} bind:this={fileinput} type='file'>
   </div>
   <div class="p-2 flex-fill">
-    <button class="btn btn-primary" on:click={upload}>UPLOAD</button>
+    <button class="btn btn-primary text-uppercase" on:click={upload}>Upload</button>
   </div>
+  {#if processedImage}
+  <div class="p-2 flex-fill">
+    <button class="btn btn-secondary text-uppercase" on:click={download}>download</button>
+  </div>
+  {/if}
 </div>
 
 <div class="d-flex">
@@ -131,12 +140,14 @@
   </div> -->
   <div class="p-2 flex-fill">
     <p>Immagine di riferimento</p>
-    <img src="{uploadedimg}" class="image" alt="uploaded img">
+    {#if uploadedimg}
+      <img src="{uploadedimg}" class="image" alt="uploaded img">
+    {/if}
   </div>
 
   <div class="p-2 flex-fill">
+    {#if loading == false && processedImage}
       <p>Processed image {#if filterName}with {filterName}{/if}</p>
-    {#if loading == false}
       <img src="{processedImage}" class="image" alt="uploaded img">
     {:else if loading == true}
     (lo spinner non si vede, fixa)
