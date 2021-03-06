@@ -33,14 +33,16 @@ def smoothing_op(data, dim_kernel, func):       # require data = PIL.image.image
 
     I = data_array
 
+    k = dim_kernel-1
+
+
     for i in range(0, x_len):    # asse x || rows
         for j in range(0, y_len):    # asse y || columns
  
             try:
-                # kernel 3x3 fisso!!
-                # -1, 0, 1
-                for x in range(i-1, i+2):
-                    for y in range(j-1, j+2):
+                # kernel 3x3 ad esempio ispeziona... -1, 0, 1 quindi range(i-1,i+2)
+                for x in range(i-1, i+k):
+                    for y in range(j-1, j+k):
                         temp.append(I[x][y])
                         # print("ITER: i---->", i, "esaminato", I[i][j], temp, len(temp))                    
             except:
@@ -62,13 +64,14 @@ def smoothing_op(data, dim_kernel, func):       # require data = PIL.image.image
 
 def main():
 
-    img_noisy_color = Image.open("../../static/images/test.png")
-    img_noisy_color.show(title="original")
+    res_3 = smoothing_algorithms(Image.open("../../static/images/noisyimg.png"), 3, "median")
+    res_5 = smoothing_algorithms(Image.open("../../static/images/noisyimg.png"), 5, "median")
+    res_8 = smoothing_algorithms(Image.open("../../static/images/noisyimg.png"), 8, "median")
 
-    res_mean = smoothing_algorithms(img_noisy_color, 3, "mean")
-    res_mean.show()
 
-    res_median = smoothing_algorithms(img_noisy_color, 3, "mean")
-    res_median.show()
+    res_3.show()
+    res_5.show()
+    res_8.show()
+
 
 main()
