@@ -47,7 +47,7 @@ def median():
 @app.route("/mean", methods=["POST"])
 def mean():
 
-    req = request.get_json() # dict type
+    req = request.get_json()
 
     new_filename = "edited/mean.png"
     input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
@@ -59,7 +59,7 @@ def mean():
 @app.route("/bilateral", methods=["POST"])
 def bilateral():
 
-    req = request.get_json() # dict type
+    req = request.get_json()
 
     radius = req['radius']
     sigma_d = req['sigma_d']

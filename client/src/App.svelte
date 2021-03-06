@@ -12,19 +12,30 @@
   document.head.appendChild(popper);
   // ****** end
   
-  import ImgEncoder from 'svelte-image-encoder';
+  // import ImgEncoder from 'svelte-image-encoder';   // da cancelalre
   import TableRow from './components/TableRow.svelte';
 
-  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256, filterName, loading = false,
+  // Ho provato a togliere l'upload ma non ha senso! perché in qualche modo devo avere l'immagine di riferimento in backend!
+
+  let urlBase64, //src, realTime = true, 
+  uploadedimg, processedImage, filterName, loading = false,
       kernel_dim_median = 3, kernel_dim_mean = 3, bilateralObj = { 
         radius: 7,
         sigma_d: 7,
         sigma_r: 6.5
       };
 
-	function loadFile(e) {
-    src = URL.createObjectURL(e.target.files[0]);
-	}
+  let fileinput;
+
+  const loadFile =(e)=>{
+    let image = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = e => {
+      // console.log("BASE 64 IMG", e.target.result)
+      urlBase64 = e.target.result
+    };
+  }
 
   async function median(){
     loading = true;
@@ -89,7 +100,7 @@
   function upload(){
     fetch('./upload', {
       method: 'POST',
-      body: url
+      body: urlBase64
     })
     .then(response => response.blob())
     .then(blob => {
@@ -98,15 +109,15 @@
     .catch(error => {
       console.error('Error:', error);
     });
-
   }
 
 
 </script>
 
+
 <div class="d-flex">
   <div class="p-2 flex-fill">
-    <input on:change={loadFile} type='file'>
+    <input on:change={(e) => loadFile(e)} bind:this={fileinput} type='file'>
   </div>
   <div class="p-2 flex-fill">
     <button class="btn btn-primary" on:click={upload}>UPLOAD</button>
@@ -114,19 +125,19 @@
 </div>
 
 <div class="d-flex">
-  <div class="p-2 flex-fill">
+  <!-- <div class="p-2 flex-fill">
     <p>Choosed image</p>
-    <ImgEncoder {src} bind:url {realTime} width={w} height={h} crossOrigin='anonymous' classes='image'/>
-  </div>
+    <img class="loaded-img" src="{loadedimg}" alt="d" />
+  </div> -->
   <div class="p-2 flex-fill">
     <p>Immagine di riferimento</p>
-    <img src="{uploadedimg}" class="image" width={w} height={h} alt="uploaded img">
+    <img src="{uploadedimg}" class="image" alt="uploaded img">
   </div>
 
   <div class="p-2 flex-fill">
       <p>Processed image {#if filterName}with {filterName}{/if}</p>
     {#if loading == false}
-      <img src="{processedImage}" class="image" width={w} height={h} alt="uploaded img">
+      <img src="{processedImage}" class="image" alt="uploaded img">
     {:else if loading == true}
     (lo spinner non si vede, fixa)
     <div class="d-flex justify-content-center">
@@ -190,7 +201,7 @@
 
   </tbody>
 
-  <TableRow method={() => console.log("TODO..")} name="Guided" numberRow="4"/>
+  <!-- <TableRow method={() => console.log("TODO..")} name="Guided" numberRow="4"/> -->
 
 </table>
 
