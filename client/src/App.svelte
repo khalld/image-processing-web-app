@@ -16,7 +16,11 @@
   import TableRow from './components/TableRow.svelte';
 
   let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256, filterName, loading = false,
-      kernel_dim_median = 3, kernel_dim_mean = 3;
+      kernel_dim_median = 3, kernel_dim_mean = 3, bilateralObj = { 
+        radius: 7,
+        sigma_d: 7,
+        sigma_r: 6.5
+      };
 
 	function loadFile(e) {
     src = URL.createObjectURL(e.target.files[0]);
@@ -63,7 +67,17 @@
 
   function bilateral(){
     loading = true;
-    fetch("./bilateral")
+    fetch("./bilateral", {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        radius: bilateralObj.radius,
+        sigma_d: bilateralObj.sigma_d,
+        sigma_r: bilateralObj.sigma_r
+      })
+    })
       .then(response => response.blob())
       .then(blob => {
         loading = false;
@@ -137,22 +151,45 @@
   <tbody>
     <tr>
       <th scope="row">Median filter</th>
-      <td><input type="number" bind:value={kernel_dim_median}/></td>
+      <td>
+        <label>Kernel dimension</label>
+        <input type="number" bind:value={kernel_dim_median}/>
+      </td>
       <td><button on:click={median} class="btn btn-warning">Apply</button></td>
     </tr>
 
     <tr>
       <th scope="row">Mean</th>
-      <td><input type="number" bind:value={kernel_dim_mean}/></td>
+      <td>
+        <label>Kernel dimension</label>
+        <input type="number" bind:value={kernel_dim_mean}/>
+      </td>
       <td><button on:click={mean} class="btn btn-warning">Apply</button></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Bilateral filter</th>
+      <td>
+        <div class="row">
+          <div class="col">
+            <label>Radius</label>
+            <input type="number" bind:value={bilateralObj.radius}/>
+          </div>
+          <div class="col">
+            <label>Sigma d</label>
+            <input type="number" bind:value={bilateralObj.sigma_d}/>
+          </div>
+          <div class="col">
+            <label>Sigma r</label>
+            <input type="number" bind:value={bilateralObj.sigma_r}/>
+          </div>
+        </div>
+      </td>
+      <td><button on:click={bilateral} class="btn btn-warning">Apply</button></td>
     </tr>
 
   </tbody>
 
-  <TableRow method={median} name="Median" numberRow="1" algorithmType="median"/>
-  
-  <TableRow method={mean} name="Mean" numberRow="2" algorithmType="median"/>
-  <TableRow method={bilateral} name="Bilateral" numberRow="3"/>
   <TableRow method={() => console.log("TODO..")} name="Guided" numberRow="4"/>
 
 </table>

@@ -56,16 +56,17 @@ def mean():
 
     return send_image(new_filename)
 
-@app.route("/bilateral")
+@app.route("/bilateral", methods=["POST"])
 def bilateral():
+
+    req = request.get_json() # dict type
+
+    radius = req['radius']
+    sigma_d = req['sigma_d']
+    sigma_r = req['sigma_r']
 
     new_filename = "edited/bilateral.png"
     input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
-
-    radius = 7
-    sigma_d = 7
-    sigma_r = 6.5
-
     result = bilateral_filter(input_img, radius, sigma_d, sigma_r)
     saveImg(result, target, new_filename)
 
