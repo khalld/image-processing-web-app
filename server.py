@@ -81,10 +81,21 @@ def guided():
 
 @app.route("/upload", methods=["POST"])
 def uploadtest():
+    # print("**** REQUEST****\n", receved['image'])
     # devo eliminare data:image/jpeg;base64,/ altrimenti non funge..
-    data = cleanbase64(request.get_data(as_text='true'))
 
+    # vecchio .. # funziona solo con jpeg..
+
+    data = cleanbase64(request.get_data(as_text='true'))
     imgdata = base64.b64decode(data)
+
+    # nuovo ...
+
+    # receved = request.get_json()
+    # imgdata = receved['image']
+
+    # print(type(imgdata))
+
     filename = 'static/images/uploaded/uploaded.png'  # I assume you have a way of picking unique filenames
     with open(filename, 'wb') as f:
         f.write(imgdata)

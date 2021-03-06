@@ -13,7 +13,7 @@
   // ****** end
   
   // import ImgEncoder from 'svelte-image-encoder';   // da cancelalre
-  import TableRow from './components/TableRow.svelte';
+  // import TableRow from './components/TableRow.svelte';
 
   // Ho provato a togliere l'upload ma non ha senso! perché in qualche modo devo avere l'immagine di riferimento in backend!
 
@@ -100,6 +100,12 @@
   function upload(){
     fetch('./upload', {
       method: 'POST',
+      // headers: {
+      //   'Content-type': 'application/json'
+      // },
+      // body: JSON.stringify({
+      //   image: urlBase64
+      // })
       body: urlBase64
     })
     .then(response => response.blob())
