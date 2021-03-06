@@ -38,7 +38,6 @@ def smoothing_op(data, dim_kernel, func):       # require data = PIL.image.image
  
             try:
                 # kernel 3x3 fisso!!
-                print("PASSO 1 ===> ", I[i-1][j-1] )
 
                 temp.append(I[i-1][j-1])
                 temp.append(I[i][j-1])
@@ -52,11 +51,17 @@ def smoothing_op(data, dim_kernel, func):       # require data = PIL.image.image
                 temp.append(I[i][j+1])
                 temp.append(I[i+1][j+1])
 
-                # print("LENNN", temp, len(temp), numpy.median(temp))
+                # print("PASSO 1====", temp, len(temp), numpy.median(temp))
 
-                for x in range(i-1, i+1):
-                    for y in range(j-1, j+1):
-                        print("PASSO 2 *****", I[x][y])
+                print("FISSO: i---->", i, "esaminato: ", I[i][j], temp, len(temp))
+                temp = []
+                for x in range(i-1, i+2):
+                    for y in range(j-1, j+2):
+                        temp.append(I[x][y])
+                        print("ITER: i---->", i, "esaminato", I[i][j], temp, len(temp))
+                    
+                # print("PASSO 2*****", temp, len(temp), numpy.median(temp))
+
 
                 # print(numpy.median(temp), len(temp), temp)
             except:
@@ -68,6 +73,7 @@ def smoothing_op(data, dim_kernel, func):       # require data = PIL.image.image
                 I[i][j] = numpy.mean(temp)
             elif (func == "median"):
                 I[i][j] = numpy.median(temp)
+            print("****RESET****")
             temp=[]
 
     I_ret = Image.fromarray(I)
@@ -78,12 +84,12 @@ def smoothing_op(data, dim_kernel, func):       # require data = PIL.image.image
 def main():
 
     img_noisy_color = Image.open("../../static/images/test.png")
-    img_noisy_color.show(title="original")
+    # img_noisy_color.show(title="original")
 
     res_mean = smoothing_algorithms(img_noisy_color, 3, "mean")
-    res_mean.show()
+    # res_mean.show()
 
-    res_median = smoothing_algorithms(img_noisy_color, 3, "mean")
-    res_median.show()
+    # res_median = smoothing_algorithms(img_noisy_color, 3, "mean")
+    # res_median.show()
 
 main()
