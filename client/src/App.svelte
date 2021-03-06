@@ -14,16 +14,25 @@
   
   import ImgEncoder from 'svelte-image-encoder';
   import TableRow from './components/TableRow.svelte';
-  
-  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256, filterName, loading = false;
-  
+
+  let url, src, realTime = true, uploadedimg, processedImage, w = 256, h=256, filterName, loading = false,
+      kernel_dim_median = 3, kernel_dim_mean = 3;
+
 	function loadFile(e) {
     src = URL.createObjectURL(e.target.files[0]);
 	}
 
-  function median(){
+  async function median(){
     loading = true;
-    fetch("./median")
+    fetch("./median", {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        kernel_dim: kernel_dim_median
+      })
+    })
       .then(response => response.blob())
       .then(blob => {
         loading = false;
@@ -34,7 +43,15 @@
 
   function mean(){
     loading = true;
-    fetch("./mean")
+    fetch("./mean", {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        kernel_dim: kernel_dim_mean
+      })
+    })
       .then(response => response.blob())
       .then(blob => {
         loading = false;
@@ -111,13 +128,30 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Method</th>
+      <th scope="col">Name</th>
+      <th scope="col">Variable</th>
+      <th></th>
     </tr>
   </thead>
 
-  <TableRow method={median} name="Median" numberRow="1"/>
-  <TableRow method={mean} name="Mean" numberRow="2"/>
+  <tbody>
+    <tr>
+      <th scope="row">Median filter</th>
+      <td><input type="number" bind:value={kernel_dim_median}/></td>
+      <td><button on:click={median} class="btn btn-warning">Apply</button></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Mean</th>
+      <td><input type="number" bind:value={kernel_dim_mean}/></td>
+      <td><button on:click={mean} class="btn btn-warning">Apply</button></td>
+    </tr>
+
+  </tbody>
+
+  <TableRow method={median} name="Median" numberRow="1" algorithmType="median"/>
+  
+  <TableRow method={mean} name="Mean" numberRow="2" algorithmType="median"/>
   <TableRow method={bilateral} name="Bilateral" numberRow="3"/>
   <TableRow method={() => console.log("TODO..")} name="Guided" numberRow="4"/>
 

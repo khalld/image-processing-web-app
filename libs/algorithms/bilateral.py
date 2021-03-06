@@ -37,7 +37,8 @@ def find_weight(i,j,d,I,sigma_d,sigma_r):
 
 def bilateral_filter_op(input_img, radius, sigma_d, sigma_r):
 
-    I = np.asarray(input_img, dtype="uint8")
+    I = np.array(input_img)     # non cambia nulla con nasrray il tipo è uguale
+
     data = I
     I = np.lib.pad(I, 1, 'mean')
     I_new = np.copy(data)

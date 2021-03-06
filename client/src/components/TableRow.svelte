@@ -2,7 +2,7 @@
   export let name;
   export let method;
   export let numberRow;
-
+  export let algorithmType;
 
 </script>
 

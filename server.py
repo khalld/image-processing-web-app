@@ -4,13 +4,9 @@ import numpy
 from PIL import Image
 import cv2
 import os
-from libs.algorithms.mean_or_median import mean_or_median
-
-# da sistemare nella versione finale
-from libs.algorithms.mean import mean_old
-from libs.algorithms.median import median
-
+from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
+from bunch import bunchify
 
 from libs.utils import saveImg, getSourceImg, cleanbase64
 
@@ -36,52 +32,27 @@ def base():
 def home(path):
     return send_from_directory('client/public', path)
 
-@app.route("/median")
+@app.route("/median", methods=["POST"])
 def median():
+
+    req = request.get_json() # dict type
+
     new_filename = "edited/median.png"
-
-    # ***** non funziona il trycatch! mi prende solo quello sotto l'else, considero solo il file in upload! ******
-    # try:
-    #     source = getSourceImg(targetUpload, 'uploaded.png')
-    # except FileNotFoundError:
-    #     print("File not found! Get the default value..!")
-    # else:
-    # source = getSourceImg(target, 'test.jpg')
-
-    source = getSourceImg(targetUpload, 'uploaded.png')
-    img_noisy = Image.open(source).convert("L")
-    arr = numpy.array(img_noisy)
-
-    # vecchio
-    img_median_applied = Image.fromarray(mean_or_median(arr, len(arr), len(arr[0]), "median"))
-
-    # nuovo da fixare
-    # img_median_applied = Image.fromarray( median( arr, len(arr), len(arr[0]) ) )
-
-
-    saveImg(img_median_applied, target, new_filename)
+    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
+    result = remove_noise(input_img,req['kernel_dim'],"median")
+    saveImg(result, target, new_filename)
 
     return send_image(new_filename)
 
-@app.route("/mean")
+@app.route("/mean", methods=["POST"])
 def mean():
 
+    req = request.get_json() # dict type
+
     new_filename = "edited/mean.png"
-    source = getSourceImg(targetUpload, 'uploaded.png')
-    img_noisy = Image.open(source).convert("L")
-    arr = numpy.array(img_noisy)
-
-    # img_median_applied = Image.fromarray(mean_or_median(arr, len(arr), len(arr[0]), "mean"))
-
-    # nuovo da fixare
-    # mean_app = mean(arr, len(arr), len(arr[0]) )
-
-    # vecchio
-    mean_app = mean_old(arr, len(arr), len(arr[0]))
-
-    img_mean_app = Image.fromarray(mean_app)
-
-    saveImg(img_mean_app, target, new_filename)
+    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
+    result = remove_noise(input_img,req['kernel_dim'],"mean")
+    saveImg(result, target, new_filename)
 
     return send_image(new_filename)
 
@@ -89,12 +60,14 @@ def mean():
 def bilateral():
 
     new_filename = "edited/bilateral.png"
-    source = getSourceImg(targetUpload, 'uploaded.png')
+    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
 
-    img_noisy = Image.open(source).convert("L")
-    image_bilateral_applied = bilateral_filter(img_noisy, 7,7,6.5)
+    radius = 7
+    sigma_d = 7
+    sigma_r = 6.5
 
-    saveImg(image_bilateral_applied, target, new_filename)
+    result = bilateral_filter(input_img, radius, sigma_d, sigma_r)
+    saveImg(result, target, new_filename)
 
     return send_image(new_filename)
 
