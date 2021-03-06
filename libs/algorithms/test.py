@@ -7,7 +7,7 @@ from PIL import Image
 def main():
 
     ## *********** INPUT IMG ******* ##
-    input_img = Image.open("../../static/images/test.png").convert("L")
+    input_img = Image.open("../../static/images/test.png")
     input_img.show()
 
     ## *********** BILATERAL ******** ##

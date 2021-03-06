@@ -4,10 +4,17 @@ import math
 
 def bilateral_filter(input, radius, sigma_d, sigma_r):
     if (input.mode == "L"):
-        print("L")
         return bilateral_filter_op(input, radius, sigma_d, sigma_r)
     else:
-        print("RGB")
+        r,g,b = input.split()
+
+        r = bilateral_filter_op(r, radius, sigma_d, sigma_r)
+        g = bilateral_filter_op(g, radius, sigma_d, sigma_r)
+        b = bilateral_filter_op(b, radius, sigma_d, sigma_r)
+
+        return Image.merge('RGB', (r, g, b) )
+
+
 
 # Pseudocodice spiegato nel .md file
 def find_weight(i,j,d,I,sigma_d,sigma_r):
