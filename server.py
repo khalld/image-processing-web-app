@@ -6,12 +6,8 @@ import cv2
 import os
 from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
-from bunch import bunchify
 
-from libs.utils import saveImg, getSourceImg, cleanbase64
-
-import base64
-import io
+from libs.utils import saveImg, getSourceImg, getI420FromBase64
 
 app = Flask(__name__)
 
@@ -20,7 +16,6 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 target = os.path.join(APP_ROOT, 'static/images')
 
 targetUpload = os.path.join(APP_ROOT, 'static/images/uploaded')
-
 
 # Path for our main Svelte page
 @app.route("/")
@@ -81,21 +76,11 @@ def guided():
 
 @app.route("/upload", methods=["POST"])
 def uploadtest():
-    # print("**** REQUEST****\n", receved['image'])
-    # devo eliminare data:image/jpeg;base64,/ altrimenti non funge..
 
-    # vecchio .. # funziona solo con jpeg..
-    data = cleanbase64(request.get_data(as_text='true'))
-    imgdata = base64.b64decode(data)
+    data_req = request.get_json()
+    imgdata = getI420FromBase64(data_req['image'])
 
-    # print("TIPO----", type(data), "\n\n" , data)
-    
-    # nuovo ...
-    # receved = request.get_json()
-    # imgdata = receved['image']
-    # print(type(imgdata))
-
-    filename = 'static/images/uploaded/uploaded.png'  # I assume you have a way of picking unique filenames
+    filename = 'static/images/uploaded/uploaded.png'
     with open(filename, 'wb') as f:
         f.write(imgdata)
 

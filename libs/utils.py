@@ -1,5 +1,6 @@
 import os
-
+import re, time, base64
+# from io import BytesIO
 
 # Metodo che salva un'immagine (img) nel target fornito con il nome di new_filename
 def saveImg(img, target, new_filename):
@@ -13,17 +14,18 @@ def getSourceImg(target, filename):
     source = "/".join([target, filename])
     return source
 
-# DEPRECATED 
-# il base64 ha dei caratteri strani all'inizio. quindi lo devo pulire
-def cleanbase64(str):
-    l = list(str)  # convert to list
-    # del(l[0:2]) # si deve eliminare b' non so perché lo ritorni..
-    # del(l[-1]) # .. ed anche un " ' " finale
 
-    #elimino i primi caratteri che sarebbero base:64 ecc...
-    del(l[0:23])
+# da una stringa in base64 ritorna i byte da cui poi sarà possibile ricostruire un'img..
+def getI420FromBase64(codec):
+    base64_data = re.sub('^data:image/.+;base64,', '', codec)
+    byte_data = base64.b64decode(base64_data)
 
-    s = "".join(l)  # convert back to string
-    
+    return byte_data
 
-    return s
+    # per ritornare direttamente l'immagine...
+    # image_data = BytesIO(byte_data)
+    # img = Image.open(image_data)
+    # t = time.time() # ????
+    # return img
+
+# *******************************

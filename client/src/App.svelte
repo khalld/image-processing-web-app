@@ -100,14 +100,12 @@
   function upload(){
     fetch('./upload', {
       method: 'POST',
-      // headers: {
-        // 'Content-type': 'application/json'
-        // 'Content-type': 'image/jpeg'
-      // },
-      // body: JSON.stringify({
-      //   image: urlBase64
-      // })
-      body: urlBase64
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        image: urlBase64
+      })
     })
     .then(response => response.blob())
     .then(blob => {
