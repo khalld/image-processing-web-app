@@ -101,7 +101,8 @@
     fetch('./upload', {
       method: 'POST',
       // headers: {
-      //   'Content-type': 'application/json'
+        // 'Content-type': 'application/json'
+        // 'Content-type': 'image/jpeg'
       // },
       // body: JSON.stringify({
       //   image: urlBase64

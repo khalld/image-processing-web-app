@@ -85,15 +85,14 @@ def uploadtest():
     # devo eliminare data:image/jpeg;base64,/ altrimenti non funge..
 
     # vecchio .. # funziona solo con jpeg..
-
     data = cleanbase64(request.get_data(as_text='true'))
     imgdata = base64.b64decode(data)
 
+    # print("TIPO----", type(data), "\n\n" , data)
+    
     # nuovo ...
-
     # receved = request.get_json()
     # imgdata = receved['image']
-
     # print(type(imgdata))
 
     filename = 'static/images/uploaded/uploaded.png'  # I assume you have a way of picking unique filenames
