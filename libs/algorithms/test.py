@@ -7,7 +7,7 @@ from PIL import Image
 def main():
 
     ## *********** INPUT IMG ******* ##
-    input_img = Image.open("../../static/images/noisyimg.png")
+    # input_img = Image.open("../../static/images/noisyimg.png")
     # input_img.show()
 
     ## *********** BILATERAL ******** ##
@@ -19,9 +19,7 @@ def main():
     # res_mean.show()
 
     ## *********** MEDIAN ******* ##
-    res_median = remove_noise(input_img, 7, "median")           ## testa noisyimg.png
-    res_median.show()
-
-
+    # res_median = remove_noise(input_img, 7, "median")           ## testa noisyimg.png
+    # res_median.show()
 
 main()
