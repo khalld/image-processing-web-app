@@ -5,8 +5,6 @@ from PIL import Image
 # alcuni tipi di rumori casuali hanno capacità di riduzione del rumore, sfocando meno rispetto a quelli di smoothing
 # efficaci per rumore a impulsi sia bipolare che unipolare.  Incrementare una finestra si incrementa l'ordine del mediano
 
-# non considero i bordi, li salto completamente
-
 def remove_noise(input, k, func):
     if (input.mode == "L"):
         return remove_noise_op(input,k, func)
