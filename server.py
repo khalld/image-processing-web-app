@@ -2,7 +2,7 @@ from flask import Flask, send_from_directory, send_file, request
 import random
 import numpy
 from PIL import Image
-import cv2
+# import cv2 #### never used
 import os
 from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
