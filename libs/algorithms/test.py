@@ -10,6 +10,9 @@ def box(img, r):            # BOX FILTER, img >=2d img, r: radius of box filter
     (rows, cols) = img.shape[:2]
     imDst = np.zeros_like(img)
 
+    ## NOTA:
+    # The [:, :] stands for everything from the beginning to the end just like for lists. 
+    # The difference is that the first : stands for first and the second : for the second dimension.
 
     tile = [1] * img.ndim
     tile[0] = r
@@ -55,21 +58,97 @@ def guided_filter_blackandwhite(I, p, r, eps):  # I = guide image, p: filter inp
     q = meanA * I + meanB
     return q
 
+
+def guided_filter_color(I, p, r, eps):      # I guide image, p filtering input, r windows radius, eps regularization
+
+    fullI = I
+    fullP = p
+
+    h, w = p.shape[:2]
+    N = box(np.ones((h, w)), r)
+
+    mI_r = box(I[:,:,0], r) / N
+    mI_g = box(I[:,:,1], r) / N
+    mI_b = box(I[:,:,2], r) / N
+
+    mP = box(p, r) / N
+
+    # calcolo la media di I * p
+    mIp_r = box(I[:,:,0]*p, r) / N
+    mIp_g = box(I[:,:,1]*p, r) / N
+    mIp_b = box(I[:,:,2]*p, r) / N
+
+    # per-patch covarianza di (I, p)
+    covIp_r = mIp_r - mI_r * mP
+    covIp_g = mIp_g - mI_g * mP
+    covIp_b = mIp_b - mI_b * mP
+
+    # calcolo covarianza simmetrica della matrice di I in ogni patch:
+    #       rr rg rb
+    #       rg gg gb
+    #       rb gb bb
+    var_I_rr = box(I[:,:,0] * I[:,:,0], r) / N - mI_r * mI_r;
+    var_I_rg = box(I[:,:,0] * I[:,:,1], r) / N - mI_r * mI_g;
+    var_I_rb = box(I[:,:,0] * I[:,:,2], r) / N - mI_r * mI_b;
+
+    var_I_gg = box(I[:,:,1] * I[:,:,1], r) / N - mI_g * mI_g;
+    var_I_gb = box(I[:,:,1] * I[:,:,2], r) / N - mI_g * mI_b;
+
+    var_I_bb = box(I[:,:,2] * I[:,:,2], r) / N - mI_b * mI_b;
+
+    a = np.zeros((h, w, 3))
+    for i in range(h):
+        for j in range(w):
+            sig = np.array([
+                [var_I_rr[i,j], var_I_rg[i,j], var_I_rb[i,j]],
+                [var_I_rg[i,j], var_I_gg[i,j], var_I_gb[i,j]],
+                [var_I_rb[i,j], var_I_gb[i,j], var_I_bb[i,j]]
+            ])
+            covIp = np.array([covIp_r[i,j], covIp_g[i,j], covIp_b[i,j]])
+            a[i,j,:] = np.linalg.solve(sig + eps * np.eye(3), covIp)
+
+    b = mP - a[:,:,0] * mI_r - a[:,:,1] * mI_g - a[:,:,2] * mI_b
+
+    meanA = box(a, r) / N[...,np.newaxis]
+    meanB = box(b, r) / N
+
+    q = np.sum(meanA * fullI, axis=2) + meanB
+
+    return q
+
+
+
+def guided(I, p, r, eps):
+    
+
 def main():
 
     path = "../../static/images/"
 
     ## *********** INPUT IMG ******* ##
-    input_img = Image.open("../../static/images/cat.bmp")
+    input_img = Image.open(path + "tulips.bmp")
     # input_img.show()
 
     ## ************ GUIDED ********* ##
 
-    input_guided = np.array(input_img) / 255
+    # GRAY
+    # input_guided = np.array(input_img) / 255
+    # cat_smoothed = guided_filter_blackandwhite(input_guided, input_guided, 8, 0.05)
+    # imageio.imwrite(path + 'edited/' + 'cat_smoothed.png', cat_smoothed)
 
-    cat_smoothed = guided_filter_blackandwhite(input_guided, input_guided, 8, 0.05)
+    # COLOR
 
-    imageio.imwrite(path + 'edited/' + 'cat_smoothed.png', cat_smoothed)
+    # tulips = imageio.imread(path + 'test.png').astype(np.float32) / 255
+
+    tulips = np.array(input_img) / 255
+    tulips_smoothed = np.zeros_like(tulips)
+
+    for i in range(3):
+        tulips_smoothed[:,:,i] = guided_filter_color(tulips, tulips[:,:,i], 8, 0.05)
+
+
+    imageio.imwrite(path + 'guided_color.png', tulips_smoothed)
+
 
     ## *********** BILATERAL ******** ##
     # res_bil = bilateral_filter(input_img, 7, 7, 6.5)
