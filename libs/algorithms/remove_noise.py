@@ -23,7 +23,6 @@ def remove_noise(input, k, func):
 
 def remove_noise_op(data, dim_kernel, func):       # require data = PIL.image.image
 
-    print("DIM_KERNEL EXAMPLE", dim_kernel)
     data_array = numpy.array(data)
     x_len = numpy.size(data_array,0)
     y_len = numpy.size(data_array,1)
