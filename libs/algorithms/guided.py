@@ -117,7 +117,7 @@ def guided_filter_color(I, p, r, eps):      # I guide image, p filtering input, 
 
 
 
-def guided_filter(I, p, r, eps):
+def guided_filter(I, p, r, eps):    ### da cambiare nome variabili filtering input image p, guidance image I, radius r regularization eps
     if(I.mode == "L"):
         I_array = np.array(I) / 255
         I_smoothed = guided_filter_blackandwhite(I_array, I_array, r, eps)

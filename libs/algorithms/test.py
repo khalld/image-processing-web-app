@@ -8,6 +8,16 @@ import matplotlib.pyplot as plt #importing matplotlib
 import cv2
 from math import log10, sqrt 
 
+
+def PSNR(original, compressed): 
+    mse = numpy.mean((original - compressed) ** 2) 
+    if(mse == 0):   # MSE is zero means no noise is present in the signal . 
+                    # Therefore PSNR have no importance. 
+        return 100
+    max_pixel = 255.0
+    psnr = 20 * log10(max_pixel / sqrt(mse)) 
+    return psnr
+
 def test_mean_and_median():
 
     print("trying..")
@@ -96,20 +106,45 @@ def test_mean_and_median():
     # fig.canvas.set_window_title('tiger 5x5 histogram') 
     # plt.show()
 
+def test_bilateral_and_guided():
+    path = "../../static/images/"
+    fig = plt.figure() 
 
-def PSNR(original, compressed): 
-    mse = numpy.mean((original - compressed) ** 2) 
-    if(mse == 0):   # MSE is zero means no noise is present in the signal . 
-                    # Therefore PSNR have no importance. 
-        return 100
-    max_pixel = 255.0
-    psnr = 20 * log10(max_pixel / sqrt(mse)) 
-    return psnr
+    ## *********** INPUT IMG ******* ##
+    input_img = Image.open(path + "test.jpg")
+    # input_img_noisy = Image.open(path + "/noisy/tiger.png")
+
+    ## ***** bilateral *** ##
+
+    # bilateral_filter(input, radius, sigma_d, sigma_r)
+    res_bil_1 = bilateral_filter(input_img, 2, 0.1, 6.5)
+    res_bil_1.save(path + 'edited/bilateral/res_bilateral_1.png', 'PNG')
+
+
+
+    ## **** guided *****
+
+    # def guided_filter(I, p, r, eps):
+    # res = guided_filter(input_img, input_img, 4, 0.05)
+
+    
+
+
+
+
+
+    ## PSNR
+    # input_original = cv2.imread(path + 'test.jpg')
+
+    # print("PSNR VALUE BILATERAL 3, 3, 1.5" , PSNR(input_original, cv2.imread(path + 'edited/bilateral/test_bilateral_1.png') ))
+
 
 def main():
 
     path = "../../static/images/"
     fig = plt.figure() 
+
+    test_bilateral()
 
 
 
