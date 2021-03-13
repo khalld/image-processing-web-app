@@ -6,10 +6,40 @@ import imageio
 import numpy
 import matplotlib.pyplot as plt #importing matplotlib
 import cv2
+from math import log10, sqrt 
 
 def test_mean_and_median():
 
     print("trying..")
+
+    ## first example mean
+    # input_original = cv2.imread(path + 'test.jpg')
+
+    # fig.canvas.set_window_title('Original image') 
+    # plt.hist(input_original.ravel(),256,[0,256]) 
+    # plt.show()
+
+    # input_edited = cv2.imread(path + 'edited/mean/mean_3x3.png')
+
+    # fig.canvas.set_window_title('Mean 3x3 histogram') 
+    # plt.hist(input_edited.ravel(),256,[0,256]) 
+    # plt.show()
+
+    # print("PSNR VALUE", PSNR(input_original, input_edited))
+
+    ## first example median
+    # 
+    # 
+    # input_original = cv2.imread(path + 'test.jpg')
+
+    # input_edited = cv2.imread(path + 'edited/median/median_3x3.png')
+
+    # fig.canvas.set_window_title('median 3x3 histogram') 
+    # plt.hist(input_edited.ravel(),256,[0,256]) 
+    # plt.show()
+
+    # print("PSNR VALUE median" , PSNR(input_original, input_edited))
+    #   
 
     ## ****************************+
 
@@ -65,9 +95,9 @@ def test_mean_and_median():
 
 
 def PSNR(original, compressed): 
-    mse = np.mean((original - compressed) ** 2) 
-    if(mse == 0):  # MSE is zero means no noise is present in the signal . 
-                  # Therefore PSNR have no importance. 
+    mse = numpy.mean((original - compressed) ** 2) 
+    if(mse == 0):   # MSE is zero means no noise is present in the signal . 
+                    # Therefore PSNR have no importance. 
         return 100
     max_pixel = 255.0
     psnr = 20 * log10(max_pixel / sqrt(mse)) 
@@ -77,6 +107,13 @@ def main():
 
     path = "../../static/images/"
     fig = plt.figure() 
+
+
+
+
+
+
+
 
     ## *********** INPUT IMG ******* ##
     # input_img = Image.open(path + "cat.bmp")
