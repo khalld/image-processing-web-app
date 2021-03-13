@@ -27,6 +27,9 @@ def test_mean_and_median():
 
     # print("PSNR VALUE", PSNR(input_original, input_edited))
 
+    # print("PSNR VALUE mean 3x3" , PSNR(input_original, cv2.imread(path + 'edited/mean/tiger_3x3.png') ))
+    # print("PSNR VALUE mean 5x5" , PSNR(input_original, cv2.imread(path + 'edited/mean/tiger_5x5.png') ))
+
     ## first example median
     # 
     # 
@@ -107,11 +110,6 @@ def main():
 
     path = "../../static/images/"
     fig = plt.figure() 
-
-
-
-
-
 
 
 
