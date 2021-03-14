@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from PIL import Image
 import imageio
 
 
@@ -117,33 +116,17 @@ def guided_filter_color(I, p, r, eps):      # I guide image, p filtering input, 
 
 
 
-def guided_filter(I, p, r, eps):    ### da cambiare nome variabili filtering input image p, guidance image I, radius r regularization eps
+# def guided_filter(I, p, r, eps):    ### I input image , guidance image g, radius r, regularization eps
+                                    ## per semplicità ho rimosso p dall'input in quanto viene utilizzata come immagine guida l'immagine stessa.
+def guided_filter(I, r, eps):
     if(I.mode == "L"):
         I_array = np.array(I) / 255
         I_smoothed = guided_filter_blackandwhite(I_array, I_array, r, eps)
-        return Image.fromarray(I_smoothed * 255)
+        return I_smoothed 
     else:
         I_array = np.array(I).astype(np.float32) / 255
         I_smoothed = np.zeros_like(I_array)  # smoothed array
         for i in range(3):
             I_smoothed[:,:,i] = guided_filter_color(I_array, I_array[:,:,i], r, eps)
 
-        # for i in range(3):
-        #     print(I_smoothed[:,:,i] * 255)        ## non riesco a farmi tornare un type Image, deve avere un comportamento come gli altri! Ricontrolla il codice
         return I_smoothed
-
-
-# def main():
-
-#     path = '../../static/images/'
-
-# #     img = Image.open(path + 'test.png').convert('L')
-
-#     img = cv2.imread(path + 'test.png')
-#     # guided = cv2.GuidedFilter(img,13,70)
-
-#     cv2.imshow("image",img)
-#     # cv2.imshow("guided filtering",guided)    
-#     cv2.waitKey()
-
-# main()

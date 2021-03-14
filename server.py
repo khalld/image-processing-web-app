@@ -4,8 +4,10 @@ import numpy
 from PIL import Image
 # import cv2 #### never used
 import os
+import imageio
 from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
+from libs.algorithms.guided import guided_filter
 
 from libs.utils import saveImg, getSourceImg, getI420FromBase64
 
@@ -27,17 +29,22 @@ def base():
 def home(path):
     return send_from_directory('client/public', path)
 
-@app.route("/median", methods=["POST"])
-def median():
 
-    req = request.get_json() # dict type
+@app.route("/upload", methods=["POST"])
+def upload():
+    data_req = request.get_json()
+    imgdata = getI420FromBase64(data_req['image'])
 
-    new_filename = "edited/median.png"
-    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
-    result = remove_noise(input_img,req['kernel_dim'],"median")
-    saveImg(result, target, new_filename)
+    filename = 'static/images/uploaded/uploaded.png'
+    with open(filename, 'wb') as f:
+        f.write(imgdata)
 
-    return send_image(new_filename)
+    return send_from_directory("static/images/uploaded", "uploaded.png")
+
+@app.route('/static/images/<filename>')
+def send_image(filename):
+    return send_from_directory("static/images", filename)
+
 
 @app.route("/mean", methods=["POST"])
 def mean():
@@ -47,7 +54,19 @@ def mean():
     new_filename = "edited/mean.png"
     input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
     result = remove_noise(input_img,req['kernel_dim'],"mean")
-    saveImg(result, target, new_filename)
+    saveImg(result, target, new_filename)       #### necessario salvare??
+
+    return send_image(new_filename)
+
+@app.route("/median", methods=["POST"])
+def median():
+
+    req = request.get_json() # dict type
+
+    new_filename = "edited/median.png"
+    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
+    result = remove_noise(input_img,req['kernel_dim'],"median")
+    saveImg(result, target, new_filename)       #### necessario salvare??
 
     return send_image(new_filename)
 
@@ -67,32 +86,19 @@ def bilateral():
 
     return send_image(new_filename)
 
-@app.route("/guided")
+@app.route("/guided", methods=["POST"])
 def guided():
+    req = request.get_json()
 
-    print("TODO......")
+    radius = req['radius']
+    eps = req['eps']
 
-    return str("OK")
+    new_filename = "edited/guided.png"
+    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
+    result = guided_filter(input_img, radius, eps)
+    imageio.imwrite(target + '/' + new_filename, result) 
 
-@app.route("/upload", methods=["POST"])
-def upload():
-
-    data_req = request.get_json()
-
-    print("BACKEND-----", data_req)
-
-    imgdata = getI420FromBase64(data_req['image'])
-
-    filename = 'static/images/uploaded/uploaded.png'
-    with open(filename, 'wb') as f:
-        f.write(imgdata)
-
-    return send_from_directory("static/images/uploaded", "uploaded.png")
-
-
-@app.route('/static/images/<filename>')
-def send_image(filename):
-    return send_from_directory("static/images", filename)
+    return send_image(new_filename)
 
 if __name__ == "__main__":
     app.run(debug=True)

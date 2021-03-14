@@ -118,6 +118,8 @@ def test_bilateral_and_guided():
 
     # bilateral_filter(input, radius, sigma_d, sigma_r)
     
+    ############# ****** devono essere verificati tuuuuuttti!!!!!
+
     #### sigma_d ==> 2
     res_bil_1 = bilateral_filter(input_img, 2, 2, 0.1)
     res_bil_1.save(path + 'edited/bilateral/res_bilateral_1.png', 'PNG')
@@ -160,43 +162,41 @@ def test_bilateral_and_guided():
     print("END 9")
 
 
-    ## **** guided *****
+    ## **** test guided guided *****
 
     ### r = 2 
-    #               ;;; eps = 0.1 0.2 0.4
-    
-    ################################################################ nota!!! perché è a colori! altriemnti funzionerebbe il SALV!!! devi fix e devi farlo tornare come fromArru event
-    # res_guid_1 = guided_filter(input_img, input_img, 2, 0.01)
+    #               ;;; eps = 0.1 0.2 0.4    
+    # res_guid_1 = guided_filter(input_img, 2, 0.01)
     # imageio.imwrite(path + 'edited/guided/res_guid_1.png', res_guid_1) 
 
     # print("**** END 1")
 
-    # res_guid_2 = guided_filter(input_img, input_img, 2, 0.04)
+    # res_guid_2 = guided_filter(input_img, 2, 0.04)
     # imageio.imwrite(path + 'edited/guided/res_guid_2.png', res_guid_2) 
 
     # print("**** END 2")
 
 
-    # res_guid_3 = guided_filter(input_img, input_img, 2, 0.16)
+    # res_guid_3 = guided_filter(input_img, 2, 0.16)
     # imageio.imwrite(path + 'edited/guided/res_guid_3.png', res_guid_3) 
 
     # print("**** END 3")
 
     # ### r = 4;
 
-    # res_guid_4 = guided_filter(input_img, input_img, 4, 0.01)
+    # res_guid_4 = guided_filter(input_img, 4, 0.01)
     # imageio.imwrite(path + 'edited/guided/res_guid_4.png', res_guid_4) 
 
     # print("**** END 4")
 
 
-    # res_guid_5 = guided_filter(input_img, input_img, 4, 0.04)
+    # res_guid_5 = guided_filter(input_img, 4, 0.04)
     # imageio.imwrite(path + 'edited/guided/res_guid_5.png', res_guid_5) 
 
     # print("**** END 5")
 
 
-    # res_guid_6 = guided_filter(input_img, input_img, 4, 0.16)
+    # res_guid_6 = guided_filter(input_img, 4, 0.16)
     # imageio.imwrite(path + 'edited/guided/res_guid_6.png', res_guid_6) 
 
     # print("**** END 6")
@@ -204,23 +204,22 @@ def test_bilateral_and_guided():
 
     # ### r = 8
 
-    # res_guid_7 = guided_filter(input_img, input_img, 8, 0.01)
+    # res_guid_7 = guided_filter(input_img, 8, 0.01)
     # imageio.imwrite(path + 'edited/guided/res_guid_7.png', res_guid_7) 
 
     # print("**** END 7")
 
 
-    # res_guid_8 = guided_filter(input_img, input_img, 8, 0.04)
+    # res_guid_8 = guided_filter(input_img, 8, 0.04)
     # imageio.imwrite(path + 'edited/guided/res_guid_8.png', res_guid_8) 
 
     # print("**** END 8")
 
 
-    # res_guid_9 = guided_filter(input_img, input_img, 8, 0.16)
+    # res_guid_9 = guided_filter(input_img, 8, 0.16)
     # imageio.imwrite(path + 'edited/guided/res_guid_9.png', res_guid_9) 
 
     # print("**** END 9")
-
 
     ## PSNR test guided .... todo.....
     # input_original = cv2.imread(path + 'test.jpg')

@@ -14,6 +14,8 @@
   document.head.appendChild(bootstrap);
   // ***** END IMPORT BOOTSTRAP ********
 
+  import TableRow from './components/TableRow.svelte'
+
   // ***** variabili:
   let urlBase64, uploadedimg, processedImage, filterName, loading = false,
     kernel_dim_median = 3, kernel_dim_mean = 3, 
@@ -21,7 +23,10 @@
       radius: 7,
       sigma_d: 7,
       sigma_r: 6.5
-    };
+    }, guidedObj = {
+      radius: 8,
+      eps: 0.16
+    }
 
 
   const loadFile =(e)=>{
@@ -64,6 +69,24 @@
     window.location.href = processedImage
   }
 
+  function mean(){
+    loading = true;
+    fetch("./mean", {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        kernel_dim: kernel_dim_mean
+      })
+    })
+      .then(response => response.blob())
+      .then(blob => {
+        processedImage = URL.createObjectURL(blob)
+        filterName = "di media arimetica";
+        loading = false;
+      })
+  }
 
   function median(){
     loading = true;
@@ -78,31 +101,11 @@
     })
       .then(response => response.blob())
       .then(blob => {
-        loading = false;
         processedImage = URL.createObjectURL(blob)
-        filterName = "median filter";
+        filterName = "mediano";
+        loading = false;
       })
   }
-
-  function mean(){
-    loading = true;
-    fetch("./mean", {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        kernel_dim: kernel_dim_mean
-      })
-    })
-      .then(response => response.blob())
-      .then(blob => {
-        loading = false;
-        processedImage = URL.createObjectURL(blob)
-        filterName = "mean";
-      })
-  }
-
 
   function bilateral(){
     loading = true;
@@ -117,28 +120,46 @@
         sigma_r: bilateralObj.sigma_r
       })
     })
-      .then(response => response.blob())
-      .then(blob => {
-        loading = false;
-        processedImage = URL.createObjectURL(blob)
-        filterName = "bilateral";
+    .then(response => response.blob())
+    .then(blob => {
+      loading = false;
+      processedImage = URL.createObjectURL(blob)
+      filterName = "bilateral";
+    })
+  }
+
+  function guided(){
+    loading = true;
+    fetch("./guided", {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        radius: guidedObj.radius,
+        eps: guidedObj.eps
       })
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      loading = false;
+      processedImage = URL.createObjectURL(blob)
+      filterName = "guided"
+    })
   }
 
 </script>
 
-
-
 <div class="d-flex">
   <div class="p-2 flex-fill">
-    <input on:change={(e) => loadFile(e)} type='file' accept='image/x-png,image/gif,image/jpeg'>
+    <input class="form-control form-control-lg" on:change={(e) => loadFile(e)} type='file' accept='image/x-png,image/gif,image/jpeg'>
   </div>
   <div class="p-2 flex-fill">
-    <button class="btn btn-primary text-uppercase" on:click={upload}>upload</button>
+    <button class="btn btn-primary text-uppercase btn-lg" on:click={upload}>upload</button>
   </div>
   {#if processedImage}
   <div class="p-2 flex-fill">
-    <button class="btn btn-secondary text-uppercase" on:click={download}>download</button>
+    <button class="btn btn-success text-uppercase btn-lg" on:click={download}>download</button>
   </div>
   {/if}
 </div>
@@ -148,7 +169,7 @@
   <div class="p-2 flex-fill">
     {#if uploadedimg}
       <h3>Immagine di riferimento</h3>
-      <img src="{uploadedimg}" class="image" alt="uploaded img">
+      <img src="{uploadedimg}" class="image img-thumbnail" alt="uploaded-img">
     {:else}
       <h3>Seleziona un'immagine</h3>
     {/if}
@@ -156,8 +177,8 @@
 
   <div class="p-2 flex-fill">
     {#if loading == false && processedImage}
-      <p>Processed image {#if filterName}with {filterName}{/if}</p>
-      <img src="{processedImage}" class="image" alt="uploaded img">
+      <p>Immagine processata {#if filterName}con {filterName}{/if}</p>
+      <img src="{processedImage}" class="image img-thumbnail" alt="processed-img">
     {:else if loading == true}
     <div class="d-flex justify-content-center">
       <div class="spinner-border text-warning" style="width: 7rem; height: 7rem;" role="status">
@@ -169,32 +190,57 @@
 
 </div>
 
-<table class="table">
-  <thead>
+<table class="table table-light table-striped">
+  <thead class="table-dark">
     <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Variable</th>
+      <th scope="col">Nome filtro</th>
+      <th></th>
       <th></th>
     </tr>
   </thead>
 
   <tbody>
     <tr>
-      <th scope="row">Median filter</th>
+      <th scope="row">Filtro di media arimetica</th>
       <td>
-        <label>Kernel dimension</label>
-        <input type="number" bind:value={kernel_dim_median}/>
+        <div class="form-floating">
+          <input type="number" class="form-control" id="mean-kernel" bind:value={kernel_dim_mean}>
+          <label for="mean-kernel">Dimensione finestra</label>
+        </div>
       </td>
-      <td><button on:click={median} class="btn btn-warning">Apply</button></td>
+      <td><button on:click={mean} class="btn btn-warning">Applica</button></td>
     </tr>
 
     <tr>
-      <th scope="row">Mean</th>
+      <th scope="row">Filtro mediano</th>
       <td>
-        <label>Kernel dimension</label>
-        <input type="number" bind:value={kernel_dim_mean}/>
+        <div class="form-floating">
+          <input type="number" class="form-control" id="median-kernel" bind:value={kernel_dim_median}>
+          <label for="median-kernel">Dimensione finestra</label>
+        </div>
       </td>
-      <td><button on:click={mean} class="btn btn-warning">Apply</button></td>
+      <td><button on:click={median} class="btn btn-warning">Applica</button></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Filtro guided</th>
+      <td>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="radiusGuided" bind:value={guidedObj.radius}>
+              <label for="radiusGuided">Raggio</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="regularization" bind:value={guidedObj.eps}>
+              <label for="regularization">Regolarizzazione</label>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td><button on:click={guided} class="btn btn-warning">Applica</button></td>
     </tr>
 
     <tr>
