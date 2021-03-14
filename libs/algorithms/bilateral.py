@@ -4,7 +4,11 @@ import math
 
 def bilateral_filter(input, radius, sigma_d, sigma_r):
     if (input.mode == "L"):
-        return bilateral_filter_op(input, radius, sigma_d, sigma_r)
+        I_res = bilateral_filter_op(input, radius, sigma_d, sigma_r)
+
+        print("tipo---->", type(I_res))
+
+        return Image.fromarray(I_res)
     else:
         r,g,b = input.split()
 
@@ -46,7 +50,5 @@ def bilateral_filter_op(input_img, radius, sigma_d, sigma_r):
     for i in range(1,data.shape[0]):        # asse x
         for j in range(1,data.shape[1]):    # asse y 
             I_new[i-1,j-1]=find_weight(i-1,j-1,radius,I,sigma_d,sigma_r)
-        
-    image_new = Image.fromarray(I_new)
 
-    return image_new
+    return I_new

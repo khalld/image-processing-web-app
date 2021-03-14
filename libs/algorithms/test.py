@@ -111,7 +111,7 @@ def test_bilateral_and_guided():
     fig = plt.figure() 
 
     ## *********** INPUT IMG ******* ##
-    input_img = Image.open(path + "cat.bmp")
+    input_img = Image.open(path + "test.jpg")
     # input_img_noisy = Image.open(path + "/noisy/tiger.png")
 
     ## ***** bilateral *** ##
@@ -120,46 +120,55 @@ def test_bilateral_and_guided():
     
     ############# ****** devono essere verificati tuuuuuttti!!!!!
 
-    #### sigma_d ==> 2
-    res_bil_1 = bilateral_filter(input_img, 2, 2, 0.1)
-    res_bil_1.save(path + 'edited/bilateral/res_bilateral_1.png', 'PNG')
+
+    ### tes generico
+
+    res_bil_1 = bilateral_filter(input_img, 7, 2, 0.1)      ## fai test cn jpg<!!!!!!
+    imageio.imwrite(path + 'edited/bilateral/res_bilateral_1.png', res_bil_1) 
     print("END 1")
 
-    res_bil_2 = bilateral_filter(input_img, 2, 2, 0.2)
-    res_bil_2.save(path + 'edited/bilateral/res_bilateral_2.png', 'PNG')
-    print("END 2")
+    #######
 
-    res_bil_3 = bilateral_filter(input_img, 2, 2, 0.4)
-    res_bil_3.save(path + 'edited/bilateral/res_bilateral_3.png', 'PNG')
-    print("END 3")
+    #### sigma_d ==> 2
+    # res_bil_1 = bilateral_filter(input_img, 7, 2, 0.1)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_1.png', res_bil_1) 
+    # print("END 1")
 
-    #### sigma_d ==> 4
+    # res_bil_2 = bilateral_filter(input_img, 7, 2, 0.2)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_2.png', res_bil_2) 
+    # print("END 2")
 
-    res_bil_4 = bilateral_filter(input_img, 4, 4, 0.1)
-    res_bil_4.save(path + 'edited/bilateral/res_bilateral_4.png', 'PNG')
-    print("END 4")
+    # res_bil_3 = bilateral_filter(input_img, 7, 2, 0.4)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_3.png', res_bil_3) 
+    # print("END 3")
 
-    res_bil_5 = bilateral_filter(input_img, 4, 4, 0.2)
-    res_bil_5.save(path + 'edited/bilateral/res_bilateral_5.png', 'PNG')
-    print("END 5")
+    # #### sigma_d ==> 4
 
-    res_bil_6 = bilateral_filter(input_img, 4, 4, 0.4)
-    res_bil_6.save(path + 'edited/bilateral/res_bilateral_6.png', 'PNG')
-    print("END 6")
+    # res_bil_4 = bilateral_filter(input_img, 7, 4, 0.1)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_4.png', res_bil_4) 
+    # print("END 4")
 
-    #### sigma_d ==> 8
+    # res_bil_5 = bilateral_filter(input_img, 7, 4, 0.2)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_5.png', res_bil_5) 
+    # print("END 5")
 
-    res_bil_7 = bilateral_filter(input_img, 8, 4, 0.1)
-    res_bil_7.save(path + 'edited/bilateral/res_bilateral_7.png', 'PNG')
-    print("END 7")
+    # res_bil_6 = bilateral_filter(input_img, 7, 4, 0.4)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_6.png', res_bil_6) 
+    # print("END 6")
 
-    res_bil_8 = bilateral_filter(input_img, 8, 4, 0.2)
-    res_bil_8.save(path + 'edited/bilateral/res_bilateral_8.png', 'PNG')
-    print("END 8")
+    # #### sigma_d ==> 8
 
-    res_bil_9 = bilateral_filter(input_img, 8, 4, 0.4)
-    res_bil_9.save(path + 'edited/bilateral/res_bilateral_9.ng', 'PNG')
-    print("END 9")
+    # res_bil_7 = bilateral_filter(input_img, 7, 4, 0.1)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_7.png', res_bil_7) 
+    # print("END 7")
+
+    # res_bil_8 = bilateral_filter(input_img, 7, 4, 0.2)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_8.png', res_bil_8) 
+    # print("END 8")
+
+    # res_bil_9 = bilateral_filter(input_img, 7, 4, 0.4)
+    # imageio.imwrite(path + 'edited/bilateral/res_bilateral_9.png', res_bil_9) 
+    # print("END 9")
 
 
     ## **** test guided guided *****
@@ -231,10 +240,6 @@ def main():
 
     path = "../../static/images/"
     fig = plt.figure() 
-
-    test_bilateral_and_guided()
-
-
 
     ## *********** INPUT IMG ******* ##
     # input_img = Image.open(path + "cat.bmp")
