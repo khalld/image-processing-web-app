@@ -2,14 +2,13 @@ from flask import Flask, send_from_directory, send_file, request
 import random
 import numpy
 from PIL import Image
-# import cv2 #### never used
-import os
 import imageio
+import os
 from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
 from libs.algorithms.guided import guided_filter
 
-from libs.utils import saveImg, getSourceImg, getI420FromBase64
+from libs.utils import getSourceImg, getI420FromBase64
 
 app = Flask(__name__)
 
@@ -54,7 +53,7 @@ def mean():
     new_filename = "edited/mean.png"
     input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
     result = remove_noise(input_img,req['kernel_dim'],"mean")
-    saveImg(result, target, new_filename)       #### necessario salvare??
+    imageio.imwrite(target + '/' + new_filename, result) 
 
     return send_image(new_filename)
 
@@ -66,7 +65,8 @@ def median():
     new_filename = "edited/median.png"
     input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
     result = remove_noise(input_img,req['kernel_dim'],"median")
-    saveImg(result, target, new_filename)       #### necessario salvare??
+    imageio.imwrite(target + '/' + new_filename, result) 
+
 
     return send_image(new_filename)
 
@@ -82,7 +82,7 @@ def bilateral():
     new_filename = "edited/bilateral.png"
     input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
     result = bilateral_filter(input_img, radius, sigma_d, sigma_r)
-    saveImg(result, target, new_filename)
+    imageio.imwrite(target + '/' + new_filename, result) 
 
     return send_image(new_filename)
 

@@ -1,13 +1,5 @@
 import os
 import re, time, base64
-# from io import BytesIO
-
-# Metodo che salva un'immagine (img) nel target fornito con il nome di new_filename
-def saveImg(img, target, new_filename):
-    destination = "/".join([target, new_filename])
-    if os.path.isfile(destination):
-        os.remove(destination)
-    img.save(destination)
 
 # get dell'immagine
 def getSourceImg(target, filename):
