@@ -1,43 +1,64 @@
 <script>
+  // ***** IMPORT BOOTSTRAP ********
+  var boostrapStile = document.createElement('link');
+  boostrapStile.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css';
+  boostrapStile.rel = 'stylesheet';
+  boostrapStile.integrity = 'sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl';
+  boostrapStile.crossOrigin = 'anonymous';
+  document.head.appendChild(boostrapStile)
 
-  // **** import di boostrap
   var bootstrap = document.createElement('script');
-  bootstrap.src = 'https://code.jquery.com/jquery-3.3.1.slim.min.js';
+  bootstrap.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js';
+  bootstrap.integrity = 'sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0';
+  bootstrap.crossOrigin = 'anonymous'
   document.head.appendChild(bootstrap);
-  var jquery = document.createElement('script');
-  jquery.src = 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js';
-  document.head.appendChild(jquery);
-  var popper = document.createElement('script');
-  popper.src = 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js';
-  document.head.appendChild(popper);
-  // ****** end
-  
-  // import ImgEncoder from 'svelte-image-encoder';   // da cancelalre
-  // import TableRow from './components/TableRow.svelte';
+  // ***** END IMPORT BOOTSTRAP ********
 
-  // Ho provato a togliere l'upload ma non ha senso! perché in qualche modo devo avere l'immagine di riferimento in backend!
+  // ***** variabili:
+  let urlBase64, uploadedimg, processedImage, filterName, loading = false,
+    kernel_dim_median = 3, kernel_dim_mean = 3, 
+    bilateralObj = { 
+      radius: 7,
+      sigma_d: 7,
+      sigma_r: 6.5
+    };
 
-  let urlBase64, //src, realTime = true, 
-  uploadedimg, processedImage, filterName, loading = false,
-      kernel_dim_median = 3, kernel_dim_mean = 3, bilateralObj = { 
-        radius: 7,
-        sigma_d: 7,
-        sigma_r: 6.5
-      };
-
-  let fileinput;
 
   const loadFile =(e)=>{
-    let image = e.target.files[0];
     let reader = new FileReader();
-    reader.readAsDataURL(image);
-    reader.onload = e => {
-      // console.log("BASE 64 IMG", e.target.result)
-      urlBase64 = e.target.result
-    };
+    reader.readAsDataURL(e.target.files[0]);
+
+    if(e.target.files[0].type.includes('image')){
+      reader.onload = e => {
+        urlBase64 = e.target.result
+      };
+    } else {
+      alert("Il file importato non è un'immagine!");
+    }
+
   }
 
-  async function median(){
+  function upload(){
+    fetch('./upload', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        image: urlBase64
+      })
+    })
+    .then(res => res.blob())
+    .then(blob => uploadedimg = URL.createObjectURL(blob))
+    .catch(error => console.error('Error:', error));
+  }
+
+  function download(){
+    window.location.href = processedImage
+  }
+
+
+  function median(){
     loading = true;
     fetch("./median", {
       method: 'post',
@@ -97,39 +118,16 @@
       })
   }
 
-  function upload(){
-    fetch('./upload', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        image: urlBase64
-      })
-    })
-    .then(response => response.blob())
-    .then(blob => {
-      uploadedimg = URL.createObjectURL(blob)
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  }
-  
-  function download(){
-    window.location.href = processedImage
-  }
-
 </script>
 
 
 
 <div class="d-flex">
   <div class="p-2 flex-fill">
-    <input on:change={(e) => loadFile(e)} bind:this={fileinput} type='file'>
+    <input on:change={(e) => loadFile(e)} type='file' accept='image/x-png,image/gif,image/jpeg'>
   </div>
   <div class="p-2 flex-fill">
-    <button class="btn btn-primary text-uppercase" on:click={upload}>Upload</button>
+    <button class="btn btn-primary text-uppercase" on:click={upload}>upload</button>
   </div>
   {#if processedImage}
   <div class="p-2 flex-fill">
@@ -138,15 +136,14 @@
   {/if}
 </div>
 
+
 <div class="d-flex">
-  <!-- <div class="p-2 flex-fill">
-    <p>Choosed image</p>
-    <img class="loaded-img" src="{loadedimg}" alt="d" />
-  </div> -->
   <div class="p-2 flex-fill">
-    <p>Immagine di riferimento</p>
     {#if uploadedimg}
+      <h3>Immagine di riferimento</h3>
       <img src="{uploadedimg}" class="image" alt="uploaded img">
+    {:else}
+      <h3>Seleziona un'immagine</h3>
     {/if}
   </div>
 
@@ -155,10 +152,9 @@
       <p>Processed image {#if filterName}with {filterName}{/if}</p>
       <img src="{processedImage}" class="image" alt="uploaded img">
     {:else if loading == true}
-    (lo spinner non si vede, fixa)
     <div class="d-flex justify-content-center">
-      <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+      <div class="spinner-border text-warning" style="width: 7rem; height: 7rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
       </div>
     </div>
     {/if}
@@ -217,14 +213,10 @@
 
   </tbody>
 
-  <!-- <TableRow method={() => console.log("TODO..")} name="Guided" numberRow="4"/> -->
-
 </table>
 
 
 <style>
-  @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
-
 	:global(.image) {
 		box-shadow: 2px 2px 8px rgba(0,0,0,.85);
 	}

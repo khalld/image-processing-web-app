@@ -75,7 +75,7 @@ def guided():
     return str("OK")
 
 @app.route("/upload", methods=["POST"])
-def uploadtest():
+def upload():
 
     data_req = request.get_json()
     imgdata = getI420FromBase64(data_req['image'])
