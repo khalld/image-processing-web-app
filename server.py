@@ -78,6 +78,9 @@ def guided():
 def upload():
 
     data_req = request.get_json()
+
+    print("BACKEND-----", data_req)
+
     imgdata = getI420FromBase64(data_req['image'])
 
     filename = 'static/images/uploaded/uploaded.png'

@@ -48,9 +48,16 @@
         image: urlBase64
       })
     })
-    .then(res => res.blob())
+    .then(res => {
+      if(res.ok){
+        return res.blob()
+      }
+    })
     .then(blob => uploadedimg = URL.createObjectURL(blob))
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+      alert("E' possibile caricare file solo con formato immagine");
+      console.error('Error:', error)
+    });
   }
 
   function download(){
