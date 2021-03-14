@@ -14,20 +14,19 @@
   document.head.appendChild(bootstrap);
   // ***** END IMPORT BOOTSTRAP ********
 
-  import TableRow from './components/TableRow.svelte'
-
   // ***** variabili:
   let urlBase64, uploadedimg, processedImage, filterName, loading = false,
-    kernel_dim_median = 3, kernel_dim_mean = 3, 
+    meanObj = {kernelDim: 3},
+    medianObj = { kernelDim: 3},
     bilateralObj = { 
       radius: 7,
       sigma_d: 7,
       sigma_r: 6.5
-    }, guidedObj = {
+    },
+    guidedObj = {
       radius: 8,
       eps: 0.16
     }
-
 
   const loadFile =(e)=>{
     let reader = new FileReader();
@@ -77,7 +76,7 @@
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        kernel_dim: kernel_dim_mean
+        kernel_dim: meanObj.kernelDim
       })
     })
       .then(response => response.blob())
@@ -96,7 +95,7 @@
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        kernel_dim: kernel_dim_median
+        kernel_dim: medianObj.kernelDim
       })
     })
       .then(response => response.blob())
@@ -177,7 +176,7 @@
 
   <div class="p-2 flex-fill">
     {#if loading == false && processedImage}
-      <p>Immagine processata {#if filterName}con {filterName}{/if}</p>
+      <h3>Immagine processata {#if filterName}con: {filterName}{/if}</h3>
       <img src="{processedImage}" class="image img-thumbnail" alt="processed-img">
     {:else if loading == true}
     <div class="d-flex justify-content-center">
@@ -204,7 +203,7 @@
       <th scope="row">Filtro di media arimetica</th>
       <td>
         <div class="form-floating">
-          <input type="number" class="form-control" id="mean-kernel" bind:value={kernel_dim_mean}>
+          <input type="number" class="form-control" id="mean-kernel" bind:value={meanObj.kernelDim}>
           <label for="mean-kernel">Dimensione finestra</label>
         </div>
       </td>
@@ -215,7 +214,7 @@
       <th scope="row">Filtro mediano</th>
       <td>
         <div class="form-floating">
-          <input type="number" class="form-control" id="median-kernel" bind:value={kernel_dim_median}>
+          <input type="number" class="form-control" id="median-kernel" bind:value={medianObj.kernelDim}>
           <label for="median-kernel">Dimensione finestra</label>
         </div>
       </td>
@@ -245,27 +244,32 @@
 
     <tr>
       <th scope="row">Bilateral filter</th>
+
       <td>
-        <div class="row">
-          <div class="col">
-            <label>Radius</label>
-            <input type="number" bind:value={bilateralObj.radius}/>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="radiusBilateral" bind:value={bilateralObj.radius}>
+              <label for="radiusBilateral">Raggio</label>
+            </div>
           </div>
-          <div class="col">
-            <label>Sigma d</label>
-            <input type="number" bind:value={bilateralObj.sigma_d}/>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="sigmaDBilateral" bind:value={bilateralObj.sigma_d}>
+              <label for="sigmaDBilateral">Sigma_d</label>
+            </div>
           </div>
-          <div class="col">
-            <label>Sigma r</label>
-            <input type="number" bind:value={bilateralObj.sigma_r}/>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="sigmaRBilateral" bind:value={bilateralObj.sigma_r}>
+              <label for="sigmaRBilateral">Sigma_r</label>
+            </div>
           </div>
         </div>
       </td>
       <td><button on:click={bilateral} class="btn btn-warning">Apply</button></td>
     </tr>
-
   </tbody>
-
 </table>
 
 
