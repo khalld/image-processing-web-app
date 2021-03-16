@@ -19,9 +19,8 @@
     meanObj = {kernelDim: 3},
     medianObj = { kernelDim: 3},
     bilateralObj = { 
-      radius: 7,
-      sigma_d: 7,
-      sigma_r: 6.5
+      sigma_d: 8,
+      sigma_r: 0.4
     },
     guidedObj = {
       radius: 8,
@@ -114,7 +113,6 @@
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        radius: bilateralObj.radius,
         sigma_d: bilateralObj.sigma_d,
         sigma_r: bilateralObj.sigma_r
       })
@@ -147,6 +145,19 @@
     })
   }
 
+  function psnr(){
+
+    fetch("./psnr", {
+      method: 'get'
+    })
+    .then(response => response.text())
+    .then(myPsnr => {
+      console.log(myPsnr)
+    })
+    .catch(err => {console.log("error", err)})
+
+  }
+
 </script>
 
 <div class="d-flex">
@@ -161,6 +172,8 @@
     <button class="btn btn-success text-uppercase btn-lg" on:click={download}>download</button>
   </div>
   {/if}
+
+  <button class="btn btn-info text-uppercase btn-lg" on:click={psnr}>PSNR</button>
 </div>
 
 
@@ -247,12 +260,6 @@
 
       <td>
         <div class="row g-2">
-          <div class="col-md">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="radiusBilateral" bind:value={bilateralObj.radius}>
-              <label for="radiusBilateral">Raggio</label>
-            </div>
-          </div>
           <div class="col-md">
             <div class="form-floating">
               <input type="number" class="form-control" id="sigmaDBilateral" bind:value={bilateralObj.sigma_d}>
