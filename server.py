@@ -53,10 +53,8 @@ def mean():
 
     req = request.get_json()
 
-    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
-    result = remove_noise(input_img,req['kernel_dim'],"mean")
-    imageio.imwrite(target + '/' + new_filename, result) 
-
+    result = remove_noise(targetUpload + 'uploaded.png', req['kernel_dim'], "mean")
+    cv2.imwrite(target + '/' + new_filename, result)
     return send_image(new_filename)
 
 @app.route("/median", methods=["POST"])
@@ -64,10 +62,8 @@ def median():
 
     req = request.get_json() # dict type
 
-    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
-    result = remove_noise(input_img,req['kernel_dim'],"median")
-    imageio.imwrite(target + '/' + new_filename, result) 
-
+    result = remove_noise(targetUpload + 'uploaded.png', req['kernel_dim'], "median")
+    cv2.imwrite(target + '/' + new_filename, result)
 
     return send_image(new_filename)
 

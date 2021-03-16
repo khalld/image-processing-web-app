@@ -1,35 +1,49 @@
 import numpy
-from PIL import Image
+from PIL import Image   ## deprecated
+import cv2
 
 # sostituisce valore di un pixel con il mediano dei livelli di intensità del suo intorno.
 # alcuni tipi di rumori casuali hanno capacità di riduzione del rumore, sfocando meno rispetto a quelli di smoothing
 # efficaci per rumore a impulsi sia bipolare che unipolare.  Incrementare una finestra si incrementa l'ordine del mediano
 
-def remove_noise(input, k, func):
+def remove_noise(path, k, func):
+    """
+    Args:
+        path        (str)     path
+        dim_kernel   (int)     kernel dimension
+        function     (str)     choose mean or median 
+
+    Returns:
+        result       (ndarray) output filtered image
+    """
 
     if (k % 2) == 0:
         k = k-1
 
-    if (input.mode == "L"):
-        return remove_noise_op(input,k, func)
-    else: # caso RGB
-        r, g, b = input.split()
+    I = cv2.imread(path).astype(numpy.float32)
 
-        r = remove_noise_op(r, k, func)
-        g = remove_noise_op(g, k, func)
-        b = remove_noise_op(b, k, func)
+    if (I.shape[2] == 3):   ## color
+        ## stack: Join a sequence of arrays along a new axis.
+        output = numpy.stack([ 
+                remove_noise_op( I[:,:,0], k, func ),
+                remove_noise_op( I[:,:,1], k, func ),
+                remove_noise_op( I[:,:,2], k, func )], axis=2 )    ## axis = The axis in the result array along which the input arrays are stacked.
 
-        return Image.merge('RGB', (r, g, b))
+        return output
 
-def remove_noise_op(data, dim_kernel, func):       # require data = PIL.image.image
+    elif (I.shape[2] == 1): ### bw
+        return remove_noise_op( I[:,:], k, func )
+    else:
+        return False
 
-    data_array = numpy.array(data)
-    x_len = numpy.size(data_array,0)
-    y_len = numpy.size(data_array,1)
+def remove_noise_op(input_img, dim_kernel, func):       # require data = PIL.image.image
+
+    x_len = numpy.size(input_img,0)
+    y_len = numpy.size(input_img,1)
 
     temp = []
 
-    I = data_array
+    I = input_img
     k = dim_kernel-1
 
     for i in range(0, x_len):    # asse x || rows
@@ -69,6 +83,19 @@ def remove_noise_op(data, dim_kernel, func):       # require data = PIL.image.im
 
             temp=[]
 
-    I_ret = Image.fromarray(I)
+    I_ret = I
 
     return I_ret
+
+# def main():
+#     ## ******* MEAN AND MEDIAN ******* ##
+
+#     input_img = "../../static/images/cat.bmp"
+
+#     res_mean = remove_noise(input_img, 4, "mean")
+#     cv2.imwrite('../../static/images/edited/mean/MEAN_NEW.png', res_mean) 
+
+#     res_median = remove_noise(input_img, 4, "median")
+#     cv2.imwrite('../../static/images/edited/mean/MEDIAN_NEW.png', res_median) 
+
+# main()
