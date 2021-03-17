@@ -48,7 +48,7 @@ def filter_bilateral_op( input_img, sigma_d, sigma_r, reg_constant=1e-8 ):
 def bilateral_filter(path, sigma_d, sigma_r):
     """
     Args:
-        input_img    (str)     path of img
+        path         (str)     path of img
         sigma_d      (float)   spatial gaussian
         sigma_r      (float)   value gaussian
     Returns:
@@ -68,7 +68,7 @@ def bilateral_filter(path, sigma_d, sigma_r):
         return output * 255.0
 
     elif (I.shape[2] == 1): ### bw
-        return filter_bilateral_op( I[:,:], 8.0, 0.4 )
+        return filter_bilateral_op( I[:,:], sigma_d, sigma_r )
     else:
         return False
 

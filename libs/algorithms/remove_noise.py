@@ -10,6 +10,7 @@ def remove_noise(path, k, func):
 
     Returns:
         result       (ndarray) output filtered image
+        (boolean) if input is wrong for some reason
     """
 
     if (k % 2) == 0:
