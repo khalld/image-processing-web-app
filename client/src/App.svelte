@@ -25,6 +25,11 @@
     guidedObj = {
       radius: 8,
       eps: 0.16
+    },
+    cannyObj = {
+      kernelDim: 3,
+      lower_th: 0.1,
+      higher_th: 0.8
     }
   
   function isUploaded() {
@@ -186,6 +191,33 @@
 
   }
 
+  function canny(){
+    if(cannyObj.kernelDim < 3 || cannyObj.lower_th < 0.1 || cannyObj.higher_th < 0.2){
+      alert("Valore minimo per la dimensione della finestra è 3, per il lower threhsold 0.1 e per l'higher threhsold 0.2")
+    } else {
+      if(isUploaded()){
+        loading = true;
+        fetch("./canny", {
+          method: 'post',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            kernel_dim: cannyObj.kernelDim,
+            lower_threshold: cannyObj.lower_th,
+            higher_threshold: cannyObj.higher_th
+          })
+        })
+          .then(response => response.blob())
+          .then(blob => {
+            loading = false;
+            processedImage = URL.createObjectURL(blob)
+            filterName = "canny"
+          })
+      }
+    }
+  }
+
   function psnr(){
     if(isUploaded()){
       fetch("./psnr", {
@@ -317,6 +349,33 @@
         </div>
       </td>
       <td><button on:click={guided} class="btn btn-warning">Applica</button></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Canny edge detection</th>
+      <td>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="kernel_dimension_canny" bind:value={cannyObj.kernelDim}>
+              <label for="kernel_dimension_canny">Dimensione kernel smoothing</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="lower_th_canny" bind:value={cannyObj.lower_th}>
+              <label for="lower_th_canny">Lower thresholding</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="higher_th_canny" bind:value={cannyObj.higher_th}>
+              <label for="higher_th_canny">Higher thresholding</label>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td><button on:click={canny} class="btn btn-warning">Applica</button></td>
     </tr>
 
     

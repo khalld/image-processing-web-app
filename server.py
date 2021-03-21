@@ -9,7 +9,7 @@ from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
 from libs.algorithms.guided import guided_filter
 from libs.algorithms.psnr import PSNR
-
+from libs.algorithms.canny import canny
 from libs.utils import getSourceImg, getI420FromBase64
 
 app = Flask(__name__)
@@ -50,7 +50,7 @@ def send_image(filename):
 
 
 @app.route("/mean", methods=["POST"])
-def mean():
+def mean_route():
 
     req = request.get_json()
 
@@ -59,7 +59,7 @@ def mean():
     return send_image(new_filename)
 
 @app.route("/median", methods=["POST"])
-def median():
+def median_route():
 
     req = request.get_json() # dict type
 
@@ -69,7 +69,7 @@ def median():
     return send_image(new_filename)
 
 @app.route("/bilateral", methods=["POST"])
-def bilateral():
+def bilateral_route():
 
     req = request.get_json()
 
@@ -82,7 +82,7 @@ def bilateral():
     return send_image(new_filename)
 
 @app.route("/guided", methods=["POST"])
-def guided():
+def guided_route():
     req = request.get_json()
 
     radius = req['radius']
@@ -93,8 +93,21 @@ def guided():
 
     return send_image(new_filename)
 
+@app.route("/canny", methods=["POST"])
+def canny_route():
+    req = request.get_json()
+
+    kernel_dim = req['kernel_dim']
+    low_th = req['lower_threshold']
+    high_th = req['higher_threshold']
+
+    result = canny(targetUpload + 'uploaded.png', kernel_dim, low_th , high_th)
+    imageio.imwrite(target + '/' + new_filename, result) 
+
+    return send_image(new_filename)
+
 @app.route("/psnr", methods=["GET"])
-def psnr():
+def psnr_route():
     return str(PSNR(targetUpload + 'uploaded.png', targetUpload + 'processed.png'))
 
 

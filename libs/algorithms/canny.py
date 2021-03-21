@@ -77,8 +77,8 @@ def canny(path, kernel_dim, lower_threshold, higher_threshold):
     return magnitude    ## magnitude of gradients of edges
    
 
-def main():
-    canny = canny('../../static/images/cat.bmp', 5, 0.1, 0.9)
-    cv2.imwrite('../../static/images/processed.png', canny)
+# def main():
+#     canny = canny('../../static/images/cat.bmp', 5, 0.1, 0.9)
+#     cv2.imwrite('../../static/images/processed.png', canny)
     
-main()
+# main()
