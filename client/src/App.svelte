@@ -30,13 +30,22 @@
       kernelDim: 3,
       lower_th: 0.1,
       higher_th: 0.8
-    }
+    }, psnrValue = 0;
   
   function isUploaded() {
     if(uploadedimg != undefined){
       return true;
     } else {
       alert("Necessario upload di un'immagine prima di effettuare l'operazione!")
+      return false;
+    }
+  }
+
+  function isProcessed(){
+    if(processedImage != undefined){
+      return true;
+    } else {
+      alert("Necessario applicare un filtro prima di applicarne il PSNR")
       return false;
     }
   }
@@ -219,13 +228,14 @@
   }
 
   function psnr(){
-    if(isUploaded()){
+    if(isUploaded() && isProcessed()){
       fetch("./psnr", {
         method: 'get'
       })
       .then(response => response.text())
       .then(myPsnr => {
-        console.log(myPsnr)
+        // console.log(myPsnr)
+        psnrValue = myPsnr;
       })
       .catch(err => {console.log("error", err)})
     }
@@ -246,8 +256,17 @@
     <button class="btn btn-success text-uppercase btn-lg" on:click={download}>download</button>
   </div>
   {/if}
+  <div class="p-2 flex-fill">
+    <button class="btn btn-info text-uppercase btn-lg" on:click={psnr}>PSNR</button>
+    </div>
+    
+    <div class="p-2 flex-fill">
+      <div class="input-group">
+        <span class="input-group-text">PSNR Value</span>
+        <input type="text" class="form-control" bind:value={psnrValue}>
+      </div>
+    </div>
 
-  <button class="btn btn-info text-uppercase btn-lg" on:click={psnr}>PSNR</button>
 </div>
 
 
