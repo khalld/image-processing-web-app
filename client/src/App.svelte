@@ -77,91 +77,112 @@
   }
 
   function mean(){
-    if(isUploaded()) {
-      loading = true;
-      fetch("./mean", {
-        method: 'post',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          kernel_dim: meanObj.kernelDim
+    if(meanObj.kernelDim < 3){
+      alert("La dimensione minima consentita per la finestra è 3x3!")
+    } else {
+      if(isUploaded()) {
+        loading = true;
+        fetch("./mean", {
+          method: 'post',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            kernel_dim: meanObj.kernelDim
+          })
         })
-      })
-      .then(response => response.blob())
-      .then(blob => {
-        processedImage = URL.createObjectURL(blob)
-        filterName = "di media arimetica";
-        loading = false;
-      })
+        .then(response => response.blob())
+        .then(blob => {
+          processedImage = URL.createObjectURL(blob)
+          filterName = "di media arimetica";
+          loading = false;
+        })
+      }
     }
+
 
   }
 
   function median(){
-    if(isUploaded()){
-      loading = true;
-      fetch("./median", {
-        method: 'post',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          kernel_dim: medianObj.kernelDim
+    if(medianObj.kernelDim < 3){
+      alert("La dimensione minima consentita per la finestra è 3x3!")
+    } else {
+      if(isUploaded()){
+        loading = true;
+        fetch("./median", {
+          method: 'post',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            kernel_dim: medianObj.kernelDim
+          })
         })
-      })
-      .then(response => response.blob())
-      .then(blob => {
-        processedImage = URL.createObjectURL(blob)
-        filterName = "mediano";
-        loading = false;
-      })
+        .then(response => response.blob())
+        .then(blob => {
+          processedImage = URL.createObjectURL(blob)
+          filterName = "mediano";
+          loading = false;
+        })
+      }
     }
+
 
   }
 
   function bilateral(){
-    if(isUploaded()){
-      loading = true;
-      fetch("./bilateral", {
-        method: 'post',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          sigma_d: bilateralObj.sigma_d,
-          sigma_r: bilateralObj.sigma_r
+    if(bilateralObj.sigma_d < 2 || bilateralObj.sigma_r < 0.1 ){
+      alert("Valore minimo per il sigma_d è 2, per sigma_r 0.01")
+    } else {
+      if(isUploaded()){
+        loading = true;
+        fetch("./bilateral", {
+          method: 'post',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            sigma_d: bilateralObj.sigma_d,
+            sigma_r: bilateralObj.sigma_r
+          })
         })
-      })
-      .then(response => response.blob())
-      .then(blob => {
-        loading = false;
-        processedImage = URL.createObjectURL(blob)
-        filterName = "bilateral";
-      })
+        .then(response => response.blob())
+        .then(blob => {
+          loading = false;
+          processedImage = URL.createObjectURL(blob)
+          filterName = "bilateral";
+        })
+      }
     }
+
   }
 
   function guided(){
-    if(isUploaded()){
-      loading = true;
-      fetch("./guided", {
-        method: 'post',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          radius: guidedObj.radius,
-          eps: guidedObj.eps
+
+    if(guidedObj.radius < 2 || guidedObj.eps < 0.01){
+      alert("Valore minimo per il raggio è 2, per la regolarizzazione 0.01")
+    } else {
+      if(isUploaded()){
+        loading = true;
+        fetch("./guided", {
+          method: 'post',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            radius: guidedObj.radius,
+            eps: guidedObj.eps
+          })
         })
-      })
-      .then(response => response.blob())
-      .then(blob => {
-        loading = false;
-        processedImage = URL.createObjectURL(blob)
-        filterName = "guided"
-      })
+        .then(response => response.blob())
+        .then(blob => {
+          loading = false;
+          processedImage = URL.createObjectURL(blob)
+          filterName = "guided"
+        })
+      }
     }
+
 
   }
 
@@ -283,13 +304,13 @@
         <div class="row g-2">
           <div class="col-md">
             <div class="form-floating">
-              <input type="number" class="form-control" id="radiusGuided" bind:value={guidedObj.radius}>
+              <input type="number" class="form-control" id="radiusGuided" min=2 bind:value={guidedObj.radius}>
               <label for="radiusGuided">Raggio</label>
             </div>
           </div>
           <div class="col-md">
             <div class="form-floating">
-              <input type="number" class="form-control" id="regularization" bind:value={guidedObj.eps}>
+              <input type="number" class="form-control" id="regularization" min=0.01 bind:value={guidedObj.eps}>
               <label for="regularization">Regolarizzazione</label>
             </div>
           </div>
