@@ -7,16 +7,7 @@ import numpy
 import matplotlib.pyplot as plt #importing matplotlib
 import cv2
 from math import log10, sqrt 
-
-
-def PSNR(original, compressed): 
-    mse = numpy.mean((original - compressed) ** 2) 
-    if(mse == 0):   # MSE is zero means no noise is present in the signal . 
-                    # Therefore PSNR have no importance. 
-        return 100
-    max_pixel = 255.0
-    psnr = 20 * log10(max_pixel / sqrt(mse)) 
-    return psnr
+# from psnr import PSNR
 
 def test_mean_and_median():
 

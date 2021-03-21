@@ -1,7 +1,7 @@
 .vscode
 .DS_Store
 # TEMPOREANEO, UNA VOLTA FINITO FAI L'UPLOAD
-/static/images/
+# /static/images/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

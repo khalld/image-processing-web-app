@@ -3,8 +3,7 @@ import numpy
 import random
 import imageio
 import visvis as vv
-
-## http://kaiminghe.com/publications/pami12guidedfilter.pdf
+from psnr import PSNR
 
 # i = 0             ## test
 
@@ -184,7 +183,14 @@ def guided_filter(path, r, eps):
 # def main():
 #     input_img = "../../static/images/test.jpg"
 
-#     res = guided_filter(input_img, 8, 0.16)
-#     imageio.imwrite('../../static/images/edited/res.png', res) 
+#     print("RES 1 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_1.png')  )
+#     print("RES 2 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_2.png')  )
+#     print("RES 3 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_3.png')  )
+#     print("RES 4 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_4.png')  )
+#     print("RES 5 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_5.png')  )
+#     print("RES 6 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_6.png')  )
+#     print("RES 7 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_7.png')  )
+#     print("RES 8 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_8.png')  )
+#     print("RES 9 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_9.png')  )
 
 # main()

@@ -1,5 +1,6 @@
 import cv2
 import numpy
+from psnr import PSNR
 
 def filter_bilateral_op( input_img, sigma_d, sigma_r, reg_constant=1e-8 ):
     """
@@ -74,48 +75,59 @@ def bilateral_filter(path, sigma_d, sigma_r):
 
 # def main():
 
-#     input_img = '../../static/images/cat.bmp'
+#     input_img = '../../static/images/test.jpg'
 
-#     ### sigma_d ==> 2
-#     res_bil_1 = bilateral_filter(input_img, 2, 0.1)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_1.png', res_bil_1) 
-#     print("END 1")
+    ##########  sigma_d ==> 2
+    # res_bil_1 = bilateral_filter(input_img, 2, 0.1)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_1.png', res_bil_1) 
+    # print("END 1")
 
-#     res_bil_2 = bilateral_filter(input_img, 2, 0.2)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_2.png', res_bil_2) 
-#     print("END 2")
+    # res_bil_2 = bilateral_filter(input_img, 2, 0.2)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_2.png', res_bil_2) 
+    # print("END 2")
 
-#     res_bil_3 = bilateral_filter(input_img, 2, 0.4)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_3.png', res_bil_3) 
-#     print("END 3")
+    # res_bil_3 = bilateral_filter(input_img, 2, 0.4)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_3.png', res_bil_3) 
+    # print("END 3")
 
-#     #### sigma_d ==> 4
+    ########## sigma_d ==> 4
 
-#     res_bil_4 = bilateral_filter(input_img, 4, 0.1)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_4.png', res_bil_4) 
-#     print("END 4")
+    # res_bil_4 = bilateral_filter(input_img, 4, 0.1)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_4.png', res_bil_4) 
+    # print("END 4")
 
-#     res_bil_5 = bilateral_filter(input_img, 4, 0.2)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_5.png', res_bil_5) 
-#     print("END 5")
+    # res_bil_5 = bilateral_filter(input_img, 4, 0.2)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_5.png', res_bil_5) 
+    # print("END 5")
 
-#     res_bil_6 = bilateral_filter(input_img, 4, 0.4)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_6.png', res_bil_6) 
-#     print("END 6")
+    # res_bil_6 = bilateral_filter(input_img, 4, 0.4)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_6.png', res_bil_6) 
+    # print("END 6")
 
-#     #### sigma_d ==> 8
+    ########## sigma_d ==> 8
 
-#     res_bil_7 = bilateral_filter(input_img, 4, 0.1)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_7.png', res_bil_7) 
-#     print("END 7")
+    # res_bil_7 = bilateral_filter(input_img, 4, 0.1)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_7.png', res_bil_7) 
+    # print("END 7")
 
-#     res_bil_8 = bilateral_filter(input_img, 4, 0.2)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_8.png', res_bil_8) 
-#     print("END 8")
+    # res_bil_8 = bilateral_filter(input_img, 4, 0.2)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_8.png', res_bil_8) 
+    # print("END 8")
 
-#     res_bil_9 = bilateral_filter(input_img, 4, 0.4)
-#     cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_9.png', res_bil_9) 
-#     print("END 9")
+    # res_bil_9 = bilateral_filter(input_img, 4, 0.4)
+    # cv2.imwrite('../../static/images/edited/bilateral/res_bilateral_9.png', res_bil_9) 
+    # print("END 9")
 
+    ########## PSNR ##########
+
+#     print("RES 1 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_1.png')  )
+#     print("RES 2 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_2.png')  )
+#     print("RES 3 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_3.png')  )
+#     print("RES 4 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_4.png')  )
+#     print("RES 5 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_5.png')  )
+#     print("RES 6 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_6.png')  )
+#     print("RES 7 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_7.png')  )
+#     print("RES 8 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_8.png')  )
+#     print("RES 9 ===>   ", PSNR(input_img,'../../static/images/edited/bilateral/res_bilateral_9.png')  )
 
 # main()

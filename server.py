@@ -8,6 +8,7 @@ import cv2
 from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
 from libs.algorithms.guided import guided_filter
+from libs.algorithms.psnr import PSNR, tmp
 
 from libs.utils import getSourceImg, getI420FromBase64
 
@@ -94,22 +95,9 @@ def guided():
 
     return send_image(new_filename)
 
-@app.route("/psnr", methods=["get"])
+@app.route("/psnr", methods=["GET"])
 def psnr():
-    # uploaded = cv2.imread(targetUpload + 'upload.png')
-    # processed = cv2.imread(targetUpload + 'processed.png')
-
-    # mse = numpy.mean(( uploaded - processed ) ** 2) 
-    # if(mse == 0):   # MSE is zero means no noise is present in the signal . 
-    #                 # Therefore PSNR have no importance. 
-    #     return str(100)
-    
-    # max_pixel = 255.0
-    # psnr = 20 * log10(max_pixel / sqrt(mse)) 
-    # return str(psnr)
-
-    # print("PSNR", psnr)
-    return str("this is a strrr")
+    return str("hello world")
 
 
 if __name__ == "__main__":
