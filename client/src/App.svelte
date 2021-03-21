@@ -26,6 +26,15 @@
       radius: 8,
       eps: 0.16
     }
+  
+  function isUploaded() {
+    if(uploadedimg != undefined){
+      return true;
+    } else {
+      alert("Necessario upload di un'immagine prima di effettuare l'operazione!")
+      return false;
+    }
+  }
 
   const loadFile =(e)=>{
     let reader = new FileReader();
@@ -68,93 +77,105 @@
   }
 
   function mean(){
-    loading = true;
-    fetch("./mean", {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        kernel_dim: meanObj.kernelDim
+    if(isUploaded()) {
+      loading = true;
+      fetch("./mean", {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          kernel_dim: meanObj.kernelDim
+        })
       })
-    })
       .then(response => response.blob())
       .then(blob => {
         processedImage = URL.createObjectURL(blob)
         filterName = "di media arimetica";
         loading = false;
       })
+    }
+
   }
 
   function median(){
-    loading = true;
-    fetch("./median", {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        kernel_dim: medianObj.kernelDim
+    if(isUploaded()){
+      loading = true;
+      fetch("./median", {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          kernel_dim: medianObj.kernelDim
+        })
       })
-    })
       .then(response => response.blob())
       .then(blob => {
         processedImage = URL.createObjectURL(blob)
         filterName = "mediano";
         loading = false;
       })
+    }
+
   }
 
   function bilateral(){
-    loading = true;
-    fetch("./bilateral", {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        sigma_d: bilateralObj.sigma_d,
-        sigma_r: bilateralObj.sigma_r
+    if(isUploaded()){
+      loading = true;
+      fetch("./bilateral", {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          sigma_d: bilateralObj.sigma_d,
+          sigma_r: bilateralObj.sigma_r
+        })
       })
-    })
-    .then(response => response.blob())
-    .then(blob => {
-      loading = false;
-      processedImage = URL.createObjectURL(blob)
-      filterName = "bilateral";
-    })
+      .then(response => response.blob())
+      .then(blob => {
+        loading = false;
+        processedImage = URL.createObjectURL(blob)
+        filterName = "bilateral";
+      })
+    }
   }
 
   function guided(){
-    loading = true;
-    fetch("./guided", {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        radius: guidedObj.radius,
-        eps: guidedObj.eps
+    if(isUploaded()){
+      loading = true;
+      fetch("./guided", {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          radius: guidedObj.radius,
+          eps: guidedObj.eps
+        })
       })
-    })
-    .then(response => response.blob())
-    .then(blob => {
-      loading = false;
-      processedImage = URL.createObjectURL(blob)
-      filterName = "guided"
-    })
+      .then(response => response.blob())
+      .then(blob => {
+        loading = false;
+        processedImage = URL.createObjectURL(blob)
+        filterName = "guided"
+      })
+    }
+
   }
 
   function psnr(){
-
-    fetch("./psnr", {
-      method: 'get'
-    })
-    .then(response => response.text())
-    .then(myPsnr => {
-      console.log(myPsnr)
-    })
-    .catch(err => {console.log("error", err)})
+    if(isUploaded()){
+      fetch("./psnr", {
+        method: 'get'
+      })
+      .then(response => response.text())
+      .then(myPsnr => {
+        console.log(myPsnr)
+      })
+      .catch(err => {console.log("error", err)})
+    }
 
   }
 
@@ -235,27 +256,6 @@
     </tr>
 
     <tr>
-      <th scope="row">Filtro guided</th>
-      <td>
-        <div class="row g-2">
-          <div class="col-md">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="radiusGuided" bind:value={guidedObj.radius}>
-              <label for="radiusGuided">Raggio</label>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="regularization" bind:value={guidedObj.eps}>
-              <label for="regularization">Regolarizzazione</label>
-            </div>
-          </div>
-        </div>
-      </td>
-      <td><button on:click={guided} class="btn btn-warning">Applica</button></td>
-    </tr>
-
-    <tr>
       <th scope="row">Bilateral filter</th>
 
       <td>
@@ -276,6 +276,29 @@
       </td>
       <td><button on:click={bilateral} class="btn btn-warning">Apply</button></td>
     </tr>
+
+    <tr>
+      <th scope="row">Filtro guided</th>
+      <td>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="radiusGuided" bind:value={guidedObj.radius}>
+              <label for="radiusGuided">Raggio</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="regularization" bind:value={guidedObj.eps}>
+              <label for="regularization">Regolarizzazione</label>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td><button on:click={guided} class="btn btn-warning">Applica</button></td>
+    </tr>
+
+    
   </tbody>
 </table>
 
