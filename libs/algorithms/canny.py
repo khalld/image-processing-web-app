@@ -77,18 +77,15 @@ def canny(path, kernel_dim, lower_threshold, higher_threshold):
     return magnitude    ## magnitude of gradients of edges
    
 
-def main():
-    canny_1 = canny('../../static/images/test.jpg', 3, 0.1, 0.8)
-    canny_2 = canny('../../static/images/test.jpg', 5, 0.1, 0.8)
-    canny_3 = canny('../../static/images/test.jpg', 7, 0.1, 0.8)
-    canny_4 = canny('../../static/images/test.jpg', 9, 0.1, 0.8)
+# def main():
+#     canny_1 = canny('../../static/images/test.jpg', 3, 0.1, 0.8)
+#     canny_2 = canny('../../static/images/test.jpg', 5, 0.1, 0.8)
+#     canny_3 = canny('../../static/images/test.jpg', 7, 0.1, 0.8)
+#     canny_4 = canny('../../static/images/test.jpg', 9, 0.1, 0.8)
 
-    cv2.imwrite('../../static/images/edited/canny/canny_1.png', canny_1)
-    cv2.imwrite('../../static/images/edited/canny/canny_2.png', canny_2)
-    cv2.imwrite('../../static/images/edited/canny/canny_3.png', canny_3)
-    cv2.imwrite('../../static/images/edited/canny/canny_4.png', canny_4)
+#     cv2.imwrite('../../static/images/edited/canny/canny_1.png', canny_1)
+#     cv2.imwrite('../../static/images/edited/canny/canny_2.png', canny_2)
+#     cv2.imwrite('../../static/images/edited/canny/canny_3.png', canny_3)
+#     cv2.imwrite('../../static/images/edited/canny/canny_4.png', canny_4)
 
-    
-
-    
-main()
+# main()
