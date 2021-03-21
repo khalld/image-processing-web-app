@@ -358,7 +358,7 @@
           <div class="col-md">
             <div class="form-floating">
               <input type="number" class="form-control" id="kernel_dimension_canny" bind:value={cannyObj.kernelDim}>
-              <label for="kernel_dimension_canny">Dimensione kernel smoothing</label>
+              <label for="kernel_dimension_canny">Dimension kernel (smoothing)</label>
             </div>
           </div>
           <div class="col-md">
