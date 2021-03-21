@@ -3,7 +3,7 @@ import numpy
 import random
 import imageio
 import visvis as vv
-from psnr import PSNR
+# from psnr import PSNR
 
 # i = 0             ## test
 

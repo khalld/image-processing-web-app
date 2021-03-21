@@ -8,7 +8,7 @@ import cv2
 from libs.algorithms.remove_noise import remove_noise
 from libs.algorithms.bilateral import bilateral_filter
 from libs.algorithms.guided import guided_filter
-from libs.algorithms.psnr import PSNR, tmp
+from libs.algorithms.psnr import PSNR
 
 from libs.utils import getSourceImg, getI420FromBase64
 
@@ -76,7 +76,6 @@ def bilateral():
     sigma_d = req['sigma_d']
     sigma_r = req['sigma_r']
 
-    # input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
     result = bilateral_filter(targetUpload + 'uploaded.png', sigma_d, sigma_r)
     cv2.imwrite(target + '/' + new_filename, result)
 
@@ -89,15 +88,14 @@ def guided():
     radius = req['radius']
     eps = req['eps']
 
-    input_img = Image.open(getSourceImg(targetUpload, 'uploaded.png'))
-    result = guided_filter(input_img, radius, eps)
+    result = guided_filter(targetUpload + 'uploaded.png', radius, eps)
     imageio.imwrite(target + '/' + new_filename, result) 
 
     return send_image(new_filename)
 
 @app.route("/psnr", methods=["GET"])
 def psnr():
-    return str("hello world")
+    return str(PSNR(targetUpload + 'uploaded.png', targetUpload + 'processed.png'))
 
 
 if __name__ == "__main__":
