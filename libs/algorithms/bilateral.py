@@ -14,35 +14,30 @@ def filter_bilateral_op( input_img, sigma_d, sigma_r, reg_constant=1e-8 ):
         result          (ndarray)      output bilateral-filtered image
     """
 
-    # simple Gaussian function taking the squared radius
+    # simple Gaussian function taking the squared radius (non è l)
     ## https://www.w3schools.com/python/python_lambda.asp
     gaussian = lambda r2, sigma: (numpy.exp( -0.5*r2/sigma**2 )*3).astype(int)*1.0/3.0
 
-    # definisco la dimensione della finestra 3 volte la sigma_spaziale per essere sicuri
-    # che la maggiorparte dei kernel spaziali è considerata
-    radius = int( 3*sigma_d+1 )
-
-    # initialize the results and sum of weights to very small values for
+    radius = int( 3*sigma_d+1 )                 #window's dimension must be 3 times spatial sigma to be sure most of kernel spatial is considered (cosa sbagliata nella vecchia impl)
+    
+    # (tips founded) initialize the results and sum of weights to very small values for
     # numerical stability. not strictly necessary but helpful to avoid
-    # wild values with pathological choices of parameters
-    wgt_sum = numpy.ones( input_img.shape )*reg_constant
+    # wild values with pathological choices of parameters 
+    wgt_sum = numpy.ones( input_img.shape )*reg_constant       ## denom of function
     result  = input_img*reg_constant
 
     # scorro secondo le dimensioni della finestra
     for x in range(-radius,radius+1):
         for y in range(-radius,radius+1):                  ## calc weights and compute the result..
             # compute the spatial weight
-            w = gaussian( x**2+y**2, sigma_d )
+            w = gaussian( x**2+y**2, sigma_d )             ## ** means exponenzial
 
-            # shift by the offsets
-            off = numpy.roll(input_img, [y, x], axis=[0,1] )   ## Roll array elements along a given axis.
-
-            # compute the value weight
-            tw = w*gaussian( (off-input_img)**2, sigma_r )
-
-            result += off*tw
-            wgt_sum += tw
-
+            curr_val = numpy.roll(input_img, [y, x], axis=[0,1] )   ## Roll array elements along a given axis. visual example of roll https://www.w3resource.com/numpy/manipulation/roll.php
+                                                               ## to have the intensity of pixels of the given img
+            
+            curr_weight = w*gaussian( (curr_val-input_img)**2, sigma_r )
+            result += curr_val*curr_weight
+            wgt_sum += curr_weight
     # normalize the result and return
     return result/wgt_sum
 

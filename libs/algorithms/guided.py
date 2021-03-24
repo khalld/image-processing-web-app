@@ -5,18 +5,9 @@ import imageio
 import visvis as vv
 # from psnr import PSNR
 
-# i = 0             ## test
-
-# def incr():       ### test
-#     global i
-#     i = i+1
-
 ## size of kernel dictates how many pixels in some NxN neighborhood to be calculated together.
 ## this function returns all the values inside a window of dimension r
 def box(img, r):            # BOX FILTER, img >=2d img, r: radius of box filter
-
-    # print("ENTER HERE", i)        ## test
-    # incr()                        ## test
 
     (rows, cols) = img.shape[:2]
     imDst = numpy.zeros_like(img)
@@ -27,7 +18,7 @@ def box(img, r):            # BOX FILTER, img >=2d img, r: radius of box filter
     tile = [1] * img.ndim
     tile[0] = r
     imCum = numpy.cumsum(img, 0)        ### cumsum Return the cumulative sum of the elements along a given axis.
-    imDst[0:r+1, :, ...] = imCum[r:2*r+1, :, ...]
+    imDst[0:r+1, :, ...] = imCum[r:2*r+1, :, ...]       ## ... means copy all
     imDst[r+1:rows-r, :, ...] = imCum[2*r+1:rows, :, ...] - imCum[0:rows-2*r-1, :, ...]
     imDst[rows-r:rows, :, ...] = numpy.tile(imCum[rows-1:rows, :, ...], tile) - imCum[rows-2*r-1:rows-r-1, :, ...]     ## numpy.tile(A, reps)[source] Construct an array by repeating A the number of times given by reps.
 
@@ -35,10 +26,12 @@ def box(img, r):            # BOX FILTER, img >=2d img, r: radius of box filter
     tile = [1] * img.ndim
     tile[1] = r
     imCum = numpy.cumsum(imDst, 1)
+
     imDst[:, 0:r+1, ...] = imCum[:, r:2*r+1, ...]
     imDst[:, r+1:cols-r, ...] = imCum[:, 2*r+1 : cols, ...] - imCum[:, 0 : cols-2*r-1, ...]
-    imDst[:, cols-r: cols, ...] = numpy.tile(imCum[:, cols-1:cols, ...], tile) - imCum[:, cols-2*r-1 : cols-r-1, ...]
+    imDst[:, cols-r:cols, ...] = numpy.tile(imCum[:, cols-1:cols, ...], tile) - imCum[:, cols-2*r-1 : cols-r-1, ...]
 
+    print("***** end ******")
     # print("******\n\n", imDst, "******")
 
     # imageio.imwrite('../../static/images/edited/guided/testbox/box_' + str(i) + '.png', imDst)
@@ -143,6 +136,7 @@ def guided_filter_color(I, p, r, eps):      # I guide image, p filtering input, 
                 [var_I_rb[i,j], var_I_gb[i,j], var_I_bb[i,j]]
             ])
             covIp = numpy.array([covIp_r[i,j], covIp_g[i,j], covIp_b[i,j]])
+            # linalg Solve a linear matrix equation, or system of linear scalar equations.
             a[i,j,:] = numpy.linalg.solve(sig + eps * numpy.eye(3), covIp)      ## .eye Return a 2-D array with ones on the diagonal and zeros elsewhere.
 
     b = meanPatch - a[:,:,0] * meanI_r - a[:,:,1] * meanI_g - a[:,:,2] * meanI_b
@@ -180,8 +174,11 @@ def guided_filter(path, r, eps):
         # print("exception occurred, is a bw file")
         return guided_filter_blackandwhite( I[:,:], I[:,:], r, eps )
 
-# def main():
-#     input_img = "../../static/images/test.jpg"
+def main():
+    input_img = "../../static/images/test.jpg"
+
+    res = guided_filter(input_img, 2, 0.4)
+    imageio.imwrite("../../static/images/res.png", res)
 
 #     print("RES 1 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_1.png')  )
 #     print("RES 2 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_2.png')  )
@@ -193,4 +190,4 @@ def guided_filter(path, r, eps):
 #     print("RES 8 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_8.png')  )
 #     print("RES 9 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_9.png')  )
 
-# main()
+main()

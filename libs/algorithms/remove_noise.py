@@ -23,8 +23,11 @@ def remove_noise(path, k, func):
         output = numpy.stack([ 
                 remove_noise_op( I[:,:,0], k, func ),
                 remove_noise_op( I[:,:,1], k, func ),
-                remove_noise_op( I[:,:,2], k, func )], axis=2 )    ## axis = The axis in the result array along which the input arrays are stacked.
-
+                remove_noise_op( I[:,:,2], k, func )], axis=2 )     ## axis = The axis in the result array along which the input arrays are stacked.
+                                                                    ## note about understand why axis=2 https://www.sharpsightlabs.com/blog/numpy-axes-explained/
+                                                                    ## examples making a shape of img 384 × 256 with numpy.stack with: 
+                                                                    ## -> axis=1  (256, 3, 384)
+                                                                    ## -> axis=2  (256, 384, 3)
         return output
 
     elif (I.shape[2] == 1): ### bw
@@ -78,19 +81,17 @@ def remove_noise_op(input_img, dim_kernel, func):       # require data = PIL.ima
 
             temp=[]         ## make empty the array before move the window
 
-    I_ret = I
-
-    return I_ret
+    return I
 
 # def main():
 #     ## ******* MEAN AND MEDIAN ******* ##
 
-#     input_img = "../../static/images/cat.bmp"
+#     input_img = "../../static/images/noisy/tiger.png"
 
 #     res_mean = remove_noise(input_img, 4, "mean")
-#     cv2.imwrite('../../static/images/edited/mean/MEAN_NEW.png', res_mean) 
+#     cv2.imwrite('../../static/images/edited/res.png', res_mean) 
 
 #     res_median = remove_noise(input_img, 4, "median")
-#     cv2.imwrite('../../static/images/edited/mean/MEDIAN_NEW.png', res_median) 
+#     cv2.imwrite('../../static/images/edited/res.png', res_median) 
 
 # main()
