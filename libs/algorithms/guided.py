@@ -1,12 +1,15 @@
 import cv2
 import numpy
-import random
 import imageio
-import visvis as vv
+# import visvis as vv   ## only 4 visualization
 # from psnr import PSNR
 
+
+## ho fatto delle prove per sostituire la funzione box di opencv ma da risultati diversi
+## questa funzione l'ho presa dal codice ufficiale del guidedfilter scritta in matlab. (su download)
+
 ## size of kernel dictates how many pixels in some NxN neighborhood to be calculated together.
-## this function returns all the values inside a window of dimension r
+## this function returns all the values inside a window of dimension r, code from http://kaiminghe.com/eccv10/
 def box(img, r):            # BOX FILTER, img >=2d img, r: radius of box filter
 
     (rows, cols) = img.shape[:2]
@@ -31,7 +34,6 @@ def box(img, r):            # BOX FILTER, img >=2d img, r: radius of box filter
     imDst[:, r+1:cols-r, ...] = imCum[:, 2*r+1 : cols, ...] - imCum[:, 0 : cols-2*r-1, ...]
     imDst[:, cols-r:cols, ...] = numpy.tile(imCum[:, cols-1:cols, ...], tile) - imCum[:, cols-2*r-1 : cols-r-1, ...]
 
-    print("***** end ******")
     # print("******\n\n", imDst, "******")
 
     # imageio.imwrite('../../static/images/edited/guided/testbox/box_' + str(i) + '.png', imDst)
@@ -121,10 +123,8 @@ def guided_filter_color(I, p, r, eps):      # I guide image, p filtering input, 
     var_I_rr = box(I[:,:,0] * I[:,:,0], r) / N - meanI_r * meanI_r
     var_I_rg = box(I[:,:,0] * I[:,:,1], r) / N - meanI_r * meanI_g
     var_I_rb = box(I[:,:,0] * I[:,:,2], r) / N - meanI_r * meanI_b
-
     var_I_gg = box(I[:,:,1] * I[:,:,1], r) / N - meanI_g * meanI_g
     var_I_gb = box(I[:,:,1] * I[:,:,2], r) / N - meanI_g * meanI_b
-
     var_I_bb = box(I[:,:,2] * I[:,:,2], r) / N - meanI_b * meanI_b
 
     a = numpy.zeros((cols, rows, 3))
@@ -174,20 +174,20 @@ def guided_filter(path, r, eps):
         # print("exception occurred, is a bw file")
         return guided_filter_blackandwhite( I[:,:], I[:,:], r, eps )
 
-def main():
-    input_img = "../../static/images/test.jpg"
+# def main():
+#     input_img = "../../static/images/test.jpg"
 
-    res = guided_filter(input_img, 2, 0.4)
-    imageio.imwrite("../../static/images/res.png", res)
+#     res = guided_filter(input_img, 8, 0.016)
+#     imageio.imwrite("../../static/images/res.png", res)
 
-#     print("RES 1 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_1.png')  )
-#     print("RES 2 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_2.png')  )
-#     print("RES 3 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_3.png')  )
-#     print("RES 4 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_4.png')  )
-#     print("RES 5 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_5.png')  )
-#     print("RES 6 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_6.png')  )
-#     print("RES 7 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_7.png')  )
-#     print("RES 8 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_8.png')  )
-#     print("RES 9 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_9.png')  )
+# #     print("RES 1 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_1.png')  )
+# #     print("RES 2 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_2.png')  )
+# #     print("RES 3 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_3.png')  )
+# #     print("RES 4 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_4.png')  )
+# #     print("RES 5 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_5.png')  )
+# #     print("RES 6 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_6.png')  )
+# #     print("RES 7 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_7.png')  )
+# #     print("RES 8 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_8.png')  )
+# #     print("RES 9 ===>   ", PSNR(input_img,'../../static/images/edited/guided/res_guid_9.png')  )
 
-main()
+# main()

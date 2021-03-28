@@ -20,7 +20,7 @@ def remove_noise(path, k, func):
 
     if (I.shape[2] == 3):   ## color
         ## stack: Join a sequence of arrays along a new axis.
-        output = numpy.stack([ 
+        output = numpy.stack([
                 remove_noise_op( I[:,:,0], k, func ),
                 remove_noise_op( I[:,:,1], k, func ),
                 remove_noise_op( I[:,:,2], k, func )], axis=2 )     ## axis = The axis in the result array along which the input arrays are stacked.
