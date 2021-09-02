@@ -1,4 +1,4 @@
-# SvelteJs + Flask Image processing web-application
+# Image processing web-application
 Progetto multimedia per Università di Catania - Informatica (Magistrale) AA 2020/2021
 Image processing tramite python. L'applicativo è gestito con richieste backend con flask e svelteJs per il frontend.
 Tested with:
